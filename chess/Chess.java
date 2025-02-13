@@ -7,7 +7,9 @@ import chess.ReturnPiece.PieceFile;
 public class Chess {
 
         enum Player { white, black }
-    
+		
+		static Player currentPlayer = Player.white;
+		static ArrayList<ReturnPiece> pieces = new ArrayList<ReturnPiece>();
 	/**
 	 * Plays the next move for whichever player has the turn.
 	 * 
@@ -20,10 +22,54 @@ public class Chess {
 	public static ReturnPlay play(String move) {
 
 		/* FILL IN THIS METHOD */
-		
+		//So we get a string and then um we have to uh make it so we knwo the rank ans ummm file of the whatever we get
+		//we should get the first line or move and look through the array and see if a piece is on that spot and if it is 
+		//I'm liking this idea so were gonna code it now. Heres the code for this idea:
+		ReturnPlay littleBoy = new ReturnPlay();
+		littleBoy.message = null;
+		littleBoy.piecesOnBoard = pieces;
+
+		//Determining the syntax of a move string to get the initial and next rank and file is a whole thing
+		//char intitFile = move.charAt(0);
+		//int intitRank = move.charAt(1);
+
+		int initRank = 2;
+		PieceFile initFile = PieceFile.e;
+
+		int nextRank = 4;
+		PieceFile nextFile = PieceFile.e;
+
+		int index = -1;
+		for(int i = 0; i < pieces.size(); i++){
+			if(pieces.get(i).pieceFile == initFile && pieces.get(i).pieceRank == initRank){
+				//We found the piece YAY
+				index = i;
+				break;
+			}
+		}
+
+		if (index == -1){
+			//WHERE MY PIECE AT???
+		}
+
+		boolean check = false;
+		//HERE WE GO! NOWWWWW we can check if our piece can actually move to its next position
+		if (pieces.get(index).pieceType == PieceType.WP || pieces.get(index).pieceType == PieceType.BP){
+			check = Pawn.canMove(initFile, initRank, nextFile, nextRank);
+		}
+
+		//Need if statements about each 
+
+
+		if (check){
+				littleBoy.piecesOnBoard.get(index).pieceFile = nextFile;
+				littleBoy.piecesOnBoard.get(index).pieceRank = nextRank;
+		}
 		/* FOLLOWING LINE IS A PLACEHOLDER TO MAKE COMPILER HAPPY */
 		/* WHEN YOU FILL IN THIS METHOD, YOU NEED TO RETURN A ReturnPlay OBJECT */
-		return null;
+		//if move is valid 
+		currentPlayer = (currentPlayer == Player.white) ? Player.black : Player.white;
+		return littleBoy;
 	}
 	
 	
@@ -32,7 +78,8 @@ public class Chess {
 	 */
 	public static void start() {
 		/* FILL IN THIS METHOD */
-		ArrayList<ReturnPiece> pieces = new ArrayList<ReturnPiece>();
+		pieces.clear();
+		currentPlayer = Player.white;
 		//Create every piece
 		//White pawns
 		pieces.add(new Pawn(PieceType.WP, PieceFile.a, 2));
@@ -79,5 +126,6 @@ public class Chess {
 		//Black Kings
 		pieces.add(new King(PieceType.BK, PieceFile.e, 8));
 		PlayChess.printBoard(pieces);
+		
 	}
 }
