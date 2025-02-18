@@ -1,12 +1,7 @@
 package chess;
 
-public class Knight extends ReturnPiece {
+public class Knight extends Piece {
 
-    public Knight(PieceType pieceType, PieceFile pieceFile, int pieceRank) {
-        this.pieceType = pieceType;
-        this.pieceFile = pieceFile;
-        this.pieceRank = pieceRank;
-    }
     
     
 }

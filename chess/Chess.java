@@ -9,7 +9,7 @@ public class Chess {
         enum Player { white, black }
 		
 		static Player currentPlayer = Player.white;
-		static ArrayList<ReturnPiece> pieces = new ArrayList<ReturnPiece>();
+		static ArrayList<Piece> pieces = new ArrayList<Piece>();
 	/**
 	 * Plays the next move for whichever player has the turn.
 	 * 
@@ -54,8 +54,10 @@ public class Chess {
 
 		boolean check = false;
 		//HERE WE GO! NOWWWWW we can check if our piece can actually move to its next position
-		if (pieces.get(index).pieceType == PieceType.WP || pieces.get(index).pieceType == PieceType.BP){
-			check = Pawn.canMove(initFile, initRank, nextFile, nextRank);
+		check = Piece.canMove(initFile, initRank, nextFile, nextRank); //For all pieces
+
+		if (pieces.get(index).pieceType == PieceType.WP || pieces.get(index).pieceType == PieceType.BP){ //For the pawns
+			System.out.println("STINKY");
 		}
 
 		//Need if statements about each 
@@ -82,7 +84,8 @@ public class Chess {
 		currentPlayer = Player.white;
 		//Create every piece
 		//White pawns
-		pieces.add(new Pawn(PieceType.WP, PieceFile.a, 2));
+		Piece pawn1 = new Pawn(PieceType.WP, PieceFile.a, 2);
+		pieces.add(pawn1);
         pieces.add(new Pawn(PieceType.WP, PieceFile.b, 2));
         pieces.add(new Pawn(PieceType.WP, PieceFile.c, 2));
         pieces.add(new Pawn(PieceType.WP, PieceFile.d, 2));
