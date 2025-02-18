@@ -19,6 +19,11 @@ public class Chess {
 	 *         See the section "The Chess class" in the assignment description for details of
 	 *         the contents of the returned ReturnPlay instance.
 	 */
+
+	public static ArrayList<ReturnPiece> getPieces() {
+        return pieces;
+    }
+
 	public static ReturnPlay play(String move) {
 
 		/* FILL IN THIS METHOD */
