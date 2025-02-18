@@ -9,7 +9,7 @@ public class Chess {
         enum Player { white, black }
 		
 		static Player currentPlayer = Player.white;
-		static ArrayList<Piece> pieces = new ArrayList<Piece>();
+		static ArrayList<ReturnPiece> pieces = new ArrayList<ReturnPiece>();
 	/**
 	 * Plays the next move for whichever player has the turn.
 	 * 
@@ -53,10 +53,18 @@ public class Chess {
 		}
 
 		boolean check = false;
-		//HERE WE GO! NOWWWWW we can check if our piece can actually move to its next position
-		check = Piece.canMove(initFile, initRank, nextFile, nextRank); //For all pieces
 
-		if (pieces.get(index).pieceType == PieceType.WP || pieces.get(index).pieceType == PieceType.BP){ //For the pawns
+		//Gets the player turn as a char
+		char turn = 'w';
+		if (currentPlayer == Player.black)
+		{
+			turn = 'b';
+		}
+
+		//HERE WE GO! NOWWWWW we can check if our piece can actually move to its next position
+		//check = Piece.canMove(initFile, initRank, nextFile, nextRank, turn); //For all pieces
+
+		if (pieces.get(index).pieceType == PieceType.WP || pieces.get(index).pieceType == PieceType.BP){
 			System.out.println("STINKY");
 		}
 
@@ -84,50 +92,49 @@ public class Chess {
 		currentPlayer = Player.white;
 		//Create every piece
 		//White pawns
-		Piece pawn1 = new Pawn(PieceType.WP, PieceFile.a, 2);
-		pieces.add(pawn1);
-        pieces.add(new Pawn(PieceType.WP, PieceFile.b, 2));
-        pieces.add(new Pawn(PieceType.WP, PieceFile.c, 2));
-        pieces.add(new Pawn(PieceType.WP, PieceFile.d, 2));
-        pieces.add(new Pawn(PieceType.WP, PieceFile.e, 2));
-        pieces.add(new Pawn(PieceType.WP, PieceFile.f, 2));
-        pieces.add(new Pawn(PieceType.WP, PieceFile.g, 2));
-        pieces.add(new Pawn(PieceType.WP, PieceFile.h, 2));
-        //Black pawns
-        pieces.add(new Pawn(PieceType.BP, PieceFile.a, 7));
-        pieces.add(new Pawn(PieceType.BP, PieceFile.b, 7));
-        pieces.add(new Pawn(PieceType.BP, PieceFile.c, 7));
-        pieces.add(new Pawn(PieceType.BP, PieceFile.d, 7));
-        pieces.add(new Pawn(PieceType.BP, PieceFile.e, 7));
-        pieces.add(new Pawn(PieceType.BP, PieceFile.f, 7));
-        pieces.add(new Pawn(PieceType.BP, PieceFile.g, 7));
-        pieces.add(new Pawn(PieceType.BP, PieceFile.h, 7));
-		//White Bishops
-		pieces.add(new Bishop(PieceType.WB, PieceFile.c, 1));
-		pieces.add(new Bishop(PieceType.WB, PieceFile.f, 1));
-		//Black Bishops
-		pieces.add(new Bishop(PieceType.BB, PieceFile.c, 8));
-		pieces.add(new Bishop(PieceType.BB, PieceFile.f, 8));
-		//White Knights
-		pieces.add(new Knight(PieceType.WN, PieceFile.b, 1));
-		pieces.add(new Knight(PieceType.WN, PieceFile.g, 1));
-		//Black Knights
-		pieces.add(new Knight(PieceType.BN, PieceFile.b, 8));
-		pieces.add(new Knight(PieceType.BN, PieceFile.g, 8));
-		//White Rooks
-		pieces.add(new Rook(PieceType.WR, PieceFile.a, 1));
-		pieces.add(new Rook(PieceType.WR, PieceFile.h, 1));
-		//Black Rooks
-		pieces.add(new Rook(PieceType.BR, PieceFile.a, 8));
-		pieces.add(new Rook(PieceType.BR, PieceFile.h, 8));
-		//White Queens
-		pieces.add(new Queen(PieceType.WQ, PieceFile.d, 1));
-		//Black Queens
-		pieces.add(new Queen(PieceType.BQ, PieceFile.d, 8));
-		//White Kings
-		pieces.add(new King(PieceType.WK, PieceFile.e, 1));
-		//Black Kings
-		pieces.add(new King(PieceType.BK, PieceFile.e, 8));
+        pieces.add(new Piece(PieceType.WP, PieceFile.a, 2));
+        pieces.add(new Piece(PieceType.WP, PieceFile.b, 2));
+		pieces.add(new Piece(PieceType.WP, PieceFile.c, 2));
+		pieces.add(new Piece(PieceType.WP, PieceFile.d, 2));
+		pieces.add(new Piece(PieceType.WP, PieceFile.e, 2));
+		pieces.add(new Piece(PieceType.WP, PieceFile.f, 2));
+		pieces.add(new Piece(PieceType.WP, PieceFile.g, 2));
+		pieces.add(new Piece(PieceType.WP, PieceFile.h, 2));
+		//Black pawns
+		pieces.add(new Piece(PieceType.BP, PieceFile.a, 7));
+		pieces.add(new Piece(PieceType.BP, PieceFile.b, 7));
+		pieces.add(new Piece(PieceType.BP, PieceFile.c, 7));
+		pieces.add(new Piece(PieceType.BP, PieceFile.d, 7));
+		pieces.add(new Piece(PieceType.BP, PieceFile.e, 7));
+		pieces.add(new Piece(PieceType.BP, PieceFile.f, 7));
+		pieces.add(new Piece(PieceType.BP, PieceFile.g, 7));
+		pieces.add(new Piece(PieceType.BP, PieceFile.h, 7));
+		//White rooks
+		pieces.add(new Piece(PieceType.WR, PieceFile.a, 1));
+		pieces.add(new Piece(PieceType.WR, PieceFile.h, 1));
+		//Black rooks
+		pieces.add(new Piece(PieceType.BR, PieceFile.a, 8));
+		pieces.add(new Piece(PieceType.BR, PieceFile.h, 8));
+		//White knights
+		pieces.add(new Piece(PieceType.WN, PieceFile.b, 1));
+		pieces.add(new Piece(PieceType.WN, PieceFile.g, 1));
+		//Black knights
+		pieces.add(new Piece(PieceType.BN, PieceFile.b, 8));
+		pieces.add(new Piece(PieceType.BN, PieceFile.g, 8));
+		//White bishops
+		pieces.add(new Piece(PieceType.WB, PieceFile.c, 1));
+		pieces.add(new Piece(PieceType.WB, PieceFile.f, 1));
+		//Black bishops
+		pieces.add(new Piece(PieceType.BB, PieceFile.c, 8));
+		pieces.add(new Piece(PieceType.BB, PieceFile.f, 8));
+		//White queen
+		pieces.add(new Piece(PieceType.WQ, PieceFile.d, 1));
+		//Black queen
+		pieces.add(new Piece(PieceType.BQ, PieceFile.d, 8));
+		//White king
+		pieces.add(new Piece(PieceType.WK, PieceFile.e, 1));
+		//Black king
+		pieces.add(new Piece(PieceType.BK, PieceFile.e, 8));
 		PlayChess.printBoard(pieces);
 		
 	}
