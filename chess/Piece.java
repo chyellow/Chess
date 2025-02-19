@@ -3,13 +3,13 @@ package chess;
 import java.util.ArrayList;
 
 public class Piece extends ReturnPiece {
-    public Piece(PieceType pieceType, PieceFile pieceFile, int pieceRank)//sd
+    public Piece(PieceType pieceType, PieceFile pieceFile, int pieceRank)
     {
         this.pieceType = pieceType;
         this.pieceFile = pieceFile; 
         this.pieceRank = pieceRank;
     }
-
+    
     ArrayList<ReturnPiece> pieces = Chess.getPieces();
 
     public int getPieceRank()

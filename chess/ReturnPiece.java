@@ -6,7 +6,7 @@ class ReturnPiece {
 	static enum PieceFile {a, b, c, d, e, f, g, h};
 	
 	PieceType pieceType;
-	PieceFile pieceFile;//sd
+	PieceFile pieceFile;
 	int pieceRank;  // 1..8
 	public String toString() {
 		return ""+pieceFile+pieceRank+":"+pieceType;

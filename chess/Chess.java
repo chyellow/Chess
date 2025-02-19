@@ -24,7 +24,7 @@ public class Chess {
         return pieces;
     }
 
-	public static ReturnPlay play(String move) { //sd
+	public static ReturnPlay play(String move) { 
 
 		/* FILL IN THIS METHOD */
 		//So we get a string and then um we have to uh make it so we knwo the rank ans ummm file of the whatever we get
@@ -38,11 +38,54 @@ public class Chess {
 		//char intitFile = move.charAt(0);
 		//int intitRank = move.charAt(1);
 
-		int initRank = 2;
-		PieceFile initFile = PieceFile.e;
+		// Trim leading and trailing spaces
+		move = move.trim();
 
-		int nextRank = 4;
-		PieceFile nextFile = PieceFile.e;
+        // Handle special moves
+        if (move.equalsIgnoreCase("resign")) {
+            littleBoy.message = currentPlayer == Player.white ? ReturnPlay.Message.RESIGN_WHITE_WINS : ReturnPlay.Message.RESIGN_BLACK_WINS;
+            return littleBoy;
+        }
+
+        boolean drawRequested = move.endsWith("draw?");
+        if (drawRequested) {
+            move = move.substring(0, move.length() - 5).trim();
+        }
+
+        // Extract initial and next file and rank from the move string
+        String[] parts = move.split(" ");
+        if (parts.length < 2) {
+            littleBoy.message = ReturnPlay.Message.ILLEGAL_MOVE;
+            return littleBoy;
+        }
+
+        char initFileChar = parts[0].charAt(0);
+        int initRank = Character.getNumericValue(parts[0].charAt(1));
+        char nextFileChar = parts[1].charAt(0);
+        int nextRank = Character.getNumericValue(parts[1].charAt(1));
+
+        // Convert the file characters to the PieceFile enum
+        PieceFile initFile = PieceFile.valueOf(String.valueOf(initFileChar));
+        PieceFile nextFile = PieceFile.valueOf(String.valueOf(nextFileChar));
+
+        // Handle pawn promotion
+        PieceType promotionType = PieceType.WQ; // Default to queen
+        if (parts.length == 3) {
+            switch (parts[2].toUpperCase()) {
+                case "N":
+                    promotionType = currentPlayer == Player.white ? PieceType.WN : PieceType.BN;
+                    break;
+                case "R":
+                    promotionType = currentPlayer == Player.white ? PieceType.WR : PieceType.BR;
+                    break;
+                case "B":
+                    promotionType = currentPlayer == Player.white ? PieceType.WB : PieceType.BB;
+                    break;
+                case "Q":
+                    promotionType = currentPlayer == Player.white ? PieceType.WQ : PieceType.BQ;
+                    break;
+            }
+        }
 
 		int index = -1;
 		for(int i = 0; i < pieces.size(); i++){
@@ -59,32 +102,30 @@ public class Chess {
 
 		boolean check = false;
 
-		//Gets the player turn as a char
-		char turn = 'w';
-		if (currentPlayer == Player.black)
-		{
-			turn = 'b';
-		}
+        // Gets the player turn as a char
+        char turn = currentPlayer == Player.white ? 'w' : 'b';
 
-		//HERE WE GO! NOWWWWW we can check if our piece can actually move to its next position
-		//check = Piece.canMove(initFile, initRank, nextFile, nextRank, turn); //For all pieces
+        // Check if the piece is a pawn and if it can move
+        if (pieces.get(index).pieceType == PieceType.WP || pieces.get(index).pieceType == PieceType.BP) {
+            System.out.println("check");
+            Pawn pawn = new Pawn(pieces.get(index).pieceType, pieces.get(index).pieceFile, pieces.get(index).pieceRank);
+            check = pawn.canMove(initFile, initRank, nextFile, nextRank, turn);
+        }
 
-		if (pieces.get(index).pieceType == PieceType.WP || pieces.get(index).pieceType == PieceType.BP){
-			System.out.println("STINKY");
-		}
+        if (check) {
+            pieces.get(index).pieceFile = nextFile;
+            pieces.get(index).pieceRank = nextRank;
+            littleBoy.piecesOnBoard = pieces;
+            // Switch the current player
+            currentPlayer = (currentPlayer == Player.white) ? Player.black : Player.white;
+            if (drawRequested) {
+                littleBoy.message = ReturnPlay.Message.DRAW;
+            }
+        } else {
+            littleBoy.message = ReturnPlay.Message.ILLEGAL_MOVE;
+        }
 
-		//Need if statements about each 
-
-
-		if (check){
-				littleBoy.piecesOnBoard.get(index).pieceFile = nextFile;
-				littleBoy.piecesOnBoard.get(index).pieceRank = nextRank;
-		}
-		/* FOLLOWING LINE IS A PLACEHOLDER TO MAKE COMPILER HAPPY */
-		/* WHEN YOU FILL IN THIS METHOD, YOU NEED TO RETURN A ReturnPlay OBJECT */
-		//if move is valid 
-		currentPlayer = (currentPlayer == Player.white) ? Player.black : Player.white;
-		return littleBoy;
+        return littleBoy;
 	}
 	
 	

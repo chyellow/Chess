@@ -2,7 +2,7 @@ package chess;
 
 public class Pawn extends Piece {
 
-    private boolean hasMoved = false;//sd
+    private boolean hasMoved = false;
 
     public Pawn(PieceType pieceType, PieceFile pieceFile, int pieceRank) {
         super(pieceType, pieceFile, pieceRank);
@@ -13,11 +13,11 @@ public class Pawn extends Piece {
     {
         if(isWithinBoard(nextFile, nextRank)){
             //Moving 2 on first turn
-            if(!hasMoved && isSquareEmpty(nextFile, nextRank) && (currFile == nextFile) && (currRank + 2 == nextRank) && (turn == 'w'))
+            if(!hasMoved && isSquareEmpty(nextFile, nextRank) && isSquareEmpty(nextFile, nextRank - 1) && (currFile == nextFile) && (currRank + 2 == nextRank) && (turn == 'w'))
             {
                 return true;
             }
-            if(!hasMoved && isSquareEmpty(nextFile, nextRank) && (currFile == nextFile) && (currRank - 2 == nextRank) && (turn == 'b'))
+            if(!hasMoved && isSquareEmpty(nextFile, nextRank) && (currFile == nextFile) && isSquareEmpty(nextFile, nextRank - 1) && (currRank - 2 == nextRank) && (turn == 'b'))
             {
                 return true;
             }
