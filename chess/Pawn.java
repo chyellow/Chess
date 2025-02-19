@@ -2,7 +2,7 @@ package chess;
 
 public class Pawn extends Piece {
 
-    private boolean hasMoved = false;
+    private boolean hasMoved = false;//sd
 
     public Pawn(PieceType pieceType, PieceFile pieceFile, int pieceRank) {
         super(pieceType, pieceFile, pieceRank);

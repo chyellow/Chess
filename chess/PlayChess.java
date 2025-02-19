@@ -19,7 +19,7 @@ public class PlayChess {
 				continue;
 			}
 			// move 
-			ReturnPlay res = Chess.play(line);
+			ReturnPlay res = Chess.play(line);//sd
 			
 			// print result message
 			if (res.message != null) {
