@@ -17,7 +17,7 @@ public class Pawn extends Piece {
             {
                 return true;
             }
-            if(!hasMoved && isSquareEmpty(nextFile, nextRank) && (currFile == nextFile) && isSquareEmpty(nextFile, nextRank - 1) && (currRank - 2 == nextRank) && (turn == 'b'))
+            if(!hasMoved && isSquareEmpty(nextFile, nextRank) && isSquareEmpty(nextFile, nextRank + 1) && (currFile == nextFile) && (currRank - 2 == nextRank) && (turn == 'b'))
             {
                 return true;
             }

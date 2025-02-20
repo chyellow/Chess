@@ -49,6 +49,27 @@ public class Piece extends ReturnPiece {
         
         return true;
     }
+//        char turn = currentPlayer == Player.white ? 'w' : 'b';
+//			String pieceStr = "" + rp.pieceType;
+//Character.toLowerCase(pieceStr.charAt(0))
+    public char getPieceColorAtPosition(PieceFile pieceFile, int pieceRank)
+    {
+        char color = 'l';
+        if (!isSquareEmpty(pieceFile, pieceRank))
+        {
+            int i;
+            for(i = 0; i < pieces.size(); i++){
+                if(pieces.get(i).pieceFile == pieceFile && pieces.get(i).pieceRank == pieceRank){
+                    break;
+                }
+            }
+
+            String pieceStr = "" + pieces.get(i).pieceType;
+            color = Character.toLowerCase(pieceStr.charAt(0));
+        }
+        
+        return color;
+    }
 
     
 }

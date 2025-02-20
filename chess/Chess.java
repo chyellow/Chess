@@ -68,6 +68,13 @@ public class Chess {
         PieceFile initFile = PieceFile.valueOf(String.valueOf(initFileChar));
         PieceFile nextFile = PieceFile.valueOf(String.valueOf(nextFileChar));
 
+        //Check if a move is recursive
+        if ((initFile == nextFile) && (initRank == nextRank))
+        {
+            littleBoy.message = ReturnPlay.Message.ILLEGAL_MOVE;
+            return littleBoy;
+        }
+
         // Handle pawn promotion
         PieceType promotionType = PieceType.WQ; // Default to queen
         if (parts.length == 3) {
