@@ -29,19 +29,23 @@ public class Pawn extends Piece {
             //Moving one foward
             if(isSquareEmpty(nextFile, nextRank) && (currFile == nextFile) && (currRank + 1 == nextRank) && (turn == 'w')) 
             {
+                this.hasMoved = true;
                 return true;
             }
             if(isSquareEmpty(nextFile, nextRank) && (currFile == nextFile) && (currRank - 1 == nextRank) && (turn == 'b')) 
             {
+                this.hasMoved = true;
                 return true;
             }
 
             //Taking diagonally
             if (!isSquareEmpty(nextFile, nextRank) && ((currFile.ordinal() + 1 == nextFile.ordinal()) || (currFile.ordinal() - 1 == nextFile.ordinal())) && (currRank + 1 == nextRank) && (turn == 'w')){
+                this.hasMoved = true;
                 return true;
             }
 
             if (!isSquareEmpty(nextFile, nextRank) && ((currFile.ordinal() + 1 == nextFile.ordinal()) || (currFile.ordinal() - 1 == nextFile.ordinal())) && (currRank - 1 == nextRank) && (turn == 'b')){
+                this.hasMoved = true;
                 return true;
             }
         }
