@@ -2,12 +2,14 @@ package chess;
 
 public class Pawn extends Piece {
 
-    private boolean hasMoved = false;
+    boolean hasMoved = false;
 
     public Pawn(PieceType pieceType, PieceFile pieceFile, int pieceRank) {
         super(pieceType, pieceFile, pieceRank);
         this.hasMoved = false;
     }
+
+
 
     public boolean canMove(PieceFile currFile, int currRank, PieceFile nextFile, int nextRank, char turn)   //turn will either be 'b' or 'w'
     {
@@ -15,10 +17,12 @@ public class Pawn extends Piece {
             //Moving 2 on first turn
             if(!hasMoved && isSquareEmpty(nextFile, nextRank) && isSquareEmpty(nextFile, nextRank - 1) && (currFile == nextFile) && (currRank + 2 == nextRank) && (turn == 'w'))
             {
+                this.hasMoved = true;
                 return true;
             }
             if(!hasMoved && isSquareEmpty(nextFile, nextRank) && isSquareEmpty(nextFile, nextRank + 1) && (currFile == nextFile) && (currRank - 2 == nextRank) && (turn == 'b'))
             {
+                this.hasMoved = true;
                 return true;
             }
 
@@ -41,7 +45,8 @@ public class Pawn extends Piece {
                 return true;
             }
         }
-      
+
+       
         return false;
     }
 }

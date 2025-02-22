@@ -42,19 +42,19 @@ public class Chess {
 		move = move.trim();
 
         // Handle special moves
-        if (move.equalsIgnoreCase("resign")) {
+        if(move.equalsIgnoreCase("resign")) {
             littleBoy.message = currentPlayer == Player.white ? ReturnPlay.Message.RESIGN_WHITE_WINS : ReturnPlay.Message.RESIGN_BLACK_WINS;
             return littleBoy;
         }
 
         boolean drawRequested = move.endsWith("draw?");
-        if (drawRequested) {
+        if(drawRequested) {
             move = move.substring(0, move.length() - 5).trim();
         }
 
         // Extract initial and next file and rank from the move string
         String[] parts = move.split(" ");
-        if (parts.length < 2) {
+        if(parts.length < 2) {
             littleBoy.message = ReturnPlay.Message.ILLEGAL_MOVE;
             return littleBoy;
         }
@@ -69,7 +69,7 @@ public class Chess {
         PieceFile nextFile = PieceFile.valueOf(String.valueOf(nextFileChar));
 
         //Check if a move is recursive
-        if ((initFile == nextFile) && (initRank == nextRank))
+        if((initFile == nextFile) && (initRank == nextRank))
         {
             littleBoy.message = ReturnPlay.Message.ILLEGAL_MOVE;
             return littleBoy;
@@ -77,7 +77,7 @@ public class Chess {
 
         // Handle pawn promotion
         PieceType promotionType = PieceType.WQ; // Default to queen
-        if (parts.length == 3) {
+        if(parts.length == 3) {
             switch (parts[2].toUpperCase()) {
                 case "N":
                     promotionType = currentPlayer == Player.white ? PieceType.WN : PieceType.BN;
@@ -103,7 +103,7 @@ public class Chess {
 			}
 		}
 
-		if (index == -1){
+		if(index == -1){
 			//WHERE MY PIECE AT???
 		}
 
@@ -113,13 +113,34 @@ public class Chess {
         char turn = currentPlayer == Player.white ? 'w' : 'b';
 
         // Check if the piece is a pawn and if it can move
-        if (pieces.get(index).pieceType == PieceType.WP || pieces.get(index).pieceType == PieceType.BP) {
-            System.out.println("check");
-            Pawn pawn = new Pawn(pieces.get(index).pieceType, pieces.get(index).pieceFile, pieces.get(index).pieceRank);
+        if(pieces.get(index).pieceType == PieceType.WP || pieces.get(index).pieceType == PieceType.BP) {
+            //Pawn pawn = new Pawn(pieces.get(index).pieceType, pieces.get(index).pieceFile, pieces.get(index).pieceRank);
+			Pawn pawn = (Pawn) pieces.get(index);
             check = pawn.canMove(initFile, initRank, nextFile, nextRank, turn);
         }
 
+
+        // Check if the target square is occupied by an opponent's piece
+        int targetIndex = -1;
+        for (int i = 0; i < pieces.size(); i++) {
+            if (pieces.get(i).pieceFile == nextFile && pieces.get(i).pieceRank == nextRank) {
+                targetIndex = i;
+                break;
+            }
+        }
+
         if (check) {
+            if (targetIndex != -1) {
+                // Check if the colors are opposite
+                if ((currentPlayer == Player.white && pieces.get(targetIndex).pieceType.toString().startsWith("B")) ||
+                    (currentPlayer == Player.black && pieces.get(targetIndex).pieceType.toString().startsWith("W"))) {
+                    // Remove the opponent's piece
+                    pieces.remove(targetIndex);
+                } else {
+                    littleBoy.message = ReturnPlay.Message.ILLEGAL_MOVE;
+                    return littleBoy;
+                }
+            }
             pieces.get(index).pieceFile = nextFile;
             pieces.get(index).pieceRank = nextRank;
             littleBoy.piecesOnBoard = pieces;
@@ -145,49 +166,49 @@ public class Chess {
 		currentPlayer = Player.white;
 		//Create every piece
 		//White pawns
-        pieces.add(new Piece(PieceType.WP, PieceFile.a, 2));
-        pieces.add(new Piece(PieceType.WP, PieceFile.b, 2));
-		pieces.add(new Piece(PieceType.WP, PieceFile.c, 2));
-		pieces.add(new Piece(PieceType.WP, PieceFile.d, 2));
-		pieces.add(new Piece(PieceType.WP, PieceFile.e, 2));
-		pieces.add(new Piece(PieceType.WP, PieceFile.f, 2));
-		pieces.add(new Piece(PieceType.WP, PieceFile.g, 2));
-		pieces.add(new Piece(PieceType.WP, PieceFile.h, 2));
+        pieces.add(new Pawn(PieceType.WP, PieceFile.a, 2));
+        pieces.add(new Pawn(PieceType.WP, PieceFile.b, 2));
+		pieces.add(new Pawn(PieceType.WP, PieceFile.c, 2));
+		pieces.add(new Pawn(PieceType.WP, PieceFile.d, 2));
+		pieces.add(new Pawn(PieceType.WP, PieceFile.e, 2));
+		pieces.add(new Pawn(PieceType.WP, PieceFile.f, 2));
+		pieces.add(new Pawn(PieceType.WP, PieceFile.g, 2));
+		pieces.add(new Pawn(PieceType.WP, PieceFile.h, 2));
 		//Black pawns
-		pieces.add(new Piece(PieceType.BP, PieceFile.a, 7));
-		pieces.add(new Piece(PieceType.BP, PieceFile.b, 7));
-		pieces.add(new Piece(PieceType.BP, PieceFile.c, 7));
-		pieces.add(new Piece(PieceType.BP, PieceFile.d, 7));
-		pieces.add(new Piece(PieceType.BP, PieceFile.e, 7));
-		pieces.add(new Piece(PieceType.BP, PieceFile.f, 7));
-		pieces.add(new Piece(PieceType.BP, PieceFile.g, 7));
-		pieces.add(new Piece(PieceType.BP, PieceFile.h, 7));
+		pieces.add(new Pawn(PieceType.BP, PieceFile.a, 7));
+		pieces.add(new Pawn(PieceType.BP, PieceFile.b, 7));
+		pieces.add(new Pawn(PieceType.BP, PieceFile.c, 7));
+		pieces.add(new Pawn(PieceType.BP, PieceFile.d, 7));
+		pieces.add(new Pawn(PieceType.BP, PieceFile.e, 7));
+		pieces.add(new Pawn(PieceType.BP, PieceFile.f, 7));
+		pieces.add(new Pawn(PieceType.BP, PieceFile.g, 7));
+		pieces.add(new Pawn(PieceType.BP, PieceFile.h, 7));
 		//White rooks
-		pieces.add(new Piece(PieceType.WR, PieceFile.a, 1));
-		pieces.add(new Piece(PieceType.WR, PieceFile.h, 1));
+		pieces.add(new Rook(PieceType.WR, PieceFile.a, 1));
+		pieces.add(new Rook(PieceType.WR, PieceFile.h, 1));
 		//Black rooks
-		pieces.add(new Piece(PieceType.BR, PieceFile.a, 8));
-		pieces.add(new Piece(PieceType.BR, PieceFile.h, 8));
+		pieces.add(new Rook(PieceType.BR, PieceFile.a, 8));
+		pieces.add(new Rook(PieceType.BR, PieceFile.h, 8));
 		//White knights
-		pieces.add(new Piece(PieceType.WN, PieceFile.b, 1));
-		pieces.add(new Piece(PieceType.WN, PieceFile.g, 1));
+		pieces.add(new Knight(PieceType.WN, PieceFile.b, 1));
+		pieces.add(new Knight(PieceType.WN, PieceFile.g, 1));
 		//Black knights
-		pieces.add(new Piece(PieceType.BN, PieceFile.b, 8));
-		pieces.add(new Piece(PieceType.BN, PieceFile.g, 8));
+		pieces.add(new Knight(PieceType.BN, PieceFile.b, 8));
+		pieces.add(new Knight(PieceType.BN, PieceFile.g, 8));
 		//White bishops
-		pieces.add(new Piece(PieceType.WB, PieceFile.c, 1));
-		pieces.add(new Piece(PieceType.WB, PieceFile.f, 1));
+		pieces.add(new Bishop(PieceType.WB, PieceFile.c, 1));
+		pieces.add(new Bishop(PieceType.WB, PieceFile.f, 1));
 		//Black bishops
-		pieces.add(new Piece(PieceType.BB, PieceFile.c, 8));
-		pieces.add(new Piece(PieceType.BB, PieceFile.f, 8));
+		pieces.add(new Bishop(PieceType.BB, PieceFile.c, 8));
+		pieces.add(new Bishop(PieceType.BB, PieceFile.f, 8));
 		//White queen
-		pieces.add(new Piece(PieceType.WQ, PieceFile.d, 1));
+		pieces.add(new Queen(PieceType.WQ, PieceFile.d, 1));
 		//Black queen
-		pieces.add(new Piece(PieceType.BQ, PieceFile.d, 8));
+		pieces.add(new Queen(PieceType.BQ, PieceFile.d, 8));
 		//White king
-		pieces.add(new Piece(PieceType.WK, PieceFile.e, 1));
+		pieces.add(new King(PieceType.WK, PieceFile.e, 1));
 		//Black king
-		pieces.add(new Piece(PieceType.BK, PieceFile.e, 8));
+		pieces.add(new King(PieceType.BK, PieceFile.e, 8));
 		PlayChess.printBoard(pieces);
 		
 	}
