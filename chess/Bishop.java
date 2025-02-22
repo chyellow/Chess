@@ -20,67 +20,82 @@ public class Bishop extends Piece {
             //Check for pieces in the way
             if (isDiagonal)
             {
-                int file = currFile.ordinal() + 1; //Add 1 since ordinal has range 0-7 and we want range 1-8
+                PieceFile file = currFile;
                 int rank = currRank;
                 switch ((rankDifference > 0 ? 2 : 0) + (fileDifference > 0 ? 1 : 0)) {
                     case 3: //Down left
                         while (rank != nextRank)
                         {
-                            file--;
+                            file = Piece.prev(file);
                             rank--;
 
-                            if (isSquareEmpty(file, rank))
+                            if (!isSquareEmpty(file, rank))
                             {
-                                //poopy
+                                return false;
                             }
                         }
                         break;
                     case 2: //Down right
                         while (rank != nextRank)
                         {
-                            file++;
+                            file = Piece.next(file);
                             rank--;
 
-
+                            if (!isSquareEmpty(file, rank))
+                            {
+                                return false;
+                            }
                         }
                         break;
                     case 1: //Up left
                         while (rank != nextRank)
                         {
-                            file--;
+                            file = Piece.prev(file);
                             rank++;
 
-
+                            if (!isSquareEmpty(file, rank))
+                            {
+                                return false;
+                            }
                         }
                         break;
                     case 0: //Up right
                         while (rank != nextRank)
                         {
-                            file++;
+                            file = Piece.next(file);
                             rank++;
 
-
+                            if (!isSquareEmpty(file, rank))
+                            {
+                                return false;
+                            }
                         }
                         break;
                 }
-            }
+            
 
-            //Check for teamkill
-            if(!isSquareEmpty(nextFile, nextRank))
-            {
-                if((turn == 'w') && (getPieceColorAtPosition(nextFile, nextRank) == 'b'))
+                //Check for teamkill
+                if(!isSquareEmpty(nextFile, nextRank))
+                {
+                    if((turn == 'w') && (getPieceColorAtPosition(nextFile, nextRank) == 'b'))
+                    {
+                        return true;
+                    }
+
+                    if((turn == 'b') && (getPieceColorAtPosition(nextFile, nextRank) == 'w'))
+                    {
+                        return true;
+                    }
+                }
+
+                //Check for empty space
+                if(isSquareEmpty(nextFile, nextRank))
                 {
                     return true;
                 }
-
-                if((turn == 'b') && (getPieceColorAtPosition(nextFile, nextRank) == 'w'))
-                {
-                    return true;
-                }
             }
-
         }
-      
+        
         return false;
     }
 }

@@ -69,7 +69,13 @@ public class Piece extends ReturnPiece {
         }
         
         return color;
+    }    
+
+    public static PieceFile next(PieceFile file) {
+        return PieceFile.values()[(file.ordinal() + 1) % PieceFile.values().length];
     }
 
-    
+    public static PieceFile prev(PieceFile file) {
+        return PieceFile.values()[(file.ordinal() - 1 + PieceFile.values().length) % PieceFile.values().length];
+    }
 }

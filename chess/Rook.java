@@ -6,4 +6,3 @@ public class Rook extends Piece {
     }
     
 }
-//im dady
