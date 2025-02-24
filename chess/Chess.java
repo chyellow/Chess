@@ -105,6 +105,11 @@ public class Chess {
             check = pawn.canMove(initFile, initRank, nextFile, nextRank, turn);
         }
 
+        if (pieces.get(index).pieceType == PieceType.WB || pieces.get(index).pieceType == PieceType.BB) {
+            Bishop bishop = (Bishop) pieces.get(index);
+            check = bishop.canMove(initFile, initRank, nextFile, nextRank, turn);
+        }
+
         // Find the target position piece
         int targetIndex = findPieceIndex(nextFile, nextRank);
 
