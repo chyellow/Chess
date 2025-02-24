@@ -24,47 +24,51 @@ public class Rook extends Piece {
                 int rank = currRank;
                 switch (Integer.signum(rankDifference) * 2 + Integer.signum(fileDifference)) {
                     case 1: //Left
+                        file = Piece.prev(file);
                         while (file != nextFile)
                         {
-                            file = Piece.prev(file);
-
                             if (!isSquareEmpty(file, rank))
                             {
                                 return false;
                             }
+
+                            file = Piece.prev(file);
                         }
                         break;
                     case -1: //Right
+                        file = Piece.next(file);
                         while (file != nextFile)
                         {
-                            file = Piece.next(file);
-
                             if (!isSquareEmpty(file, rank))
                             {
                                 return false;
                             }
+
+                            file = Piece.next(file);
                         }
                         break;
                     case 2: //Down
+                        rank--;
                         while (rank != nextRank)
                         {
-                            rank--;
-
                             if (!isSquareEmpty(file, rank))
                             {
                                 return false;
                             }
+
+                            rank--;
                         }
                         break;
                     case -2: //Up
+                        rank++;
                         while (rank != nextRank)
                         {
-                            rank++;
-
                             if (!isSquareEmpty(file, rank))
                             {
                                 return false;
                             }
+
+                            rank++;
                         }
                         break;
                 }
