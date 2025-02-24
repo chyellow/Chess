@@ -9,6 +9,13 @@
             "name": "PlayChess",
             "request": "launch",
             "mainClass": "chess.PlayChess",
+            "projectName": "Chess_1bf5e11c"
+        },
+        {
+            "type": "java",
+            "name": "PlayChess",
+            "request": "launch",
+            "mainClass": "chess.PlayChess",
             "projectName": "Chess_53ae5b7e"
         },
         {

@@ -126,7 +126,9 @@ public class Chess {
             pieces.get(index).pieceFile = nextFile;
             pieces.get(index).pieceRank = nextRank;
 
+            
             // Check if the original piece is still at the initial position
+            /* 
             int initialPieceIndex = findPieceIndex(initFile, initRank);
             if (initialPieceIndex != -1) {
                 pieces.remove(initialPieceIndex);
@@ -136,7 +138,8 @@ public class Chess {
 			index = findPieceIndex(nextFile, nextRank);
 			PieceType originalType = pieces.get(index).pieceType;
             pieces.get(index).pieceType = originalType;
-			System.out.println("Moved piece type: " + pieces.get(index).pieceType);
+            */
+
             littleBoy.piecesOnBoard = pieces;
 
             // Switch the current player
@@ -200,6 +203,5 @@ public class Chess {
         pieces.add(new King(PieceType.WK, PieceFile.e, 1));
         // Black king
         pieces.add (new King(PieceType.BK, PieceFile.e, 8));
-        PlayChess.printBoard(pieces);
     }
 }
