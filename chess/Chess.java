@@ -110,6 +110,11 @@ public class Chess {
             check = bishop.canMove(initFile, initRank, nextFile, nextRank, turn);
         }
 
+        if (pieces.get(index).pieceType == PieceType.WR || pieces.get(index).pieceType == PieceType.BR) {
+            Rook rook = (Rook) pieces.get(index);
+            check = rook.canMove(initFile, initRank, nextFile, nextRank, turn);
+        }
+
         // Find the target position piece
         int targetIndex = findPieceIndex(nextFile, nextRank);
 
@@ -130,20 +135,6 @@ public class Chess {
             index = findPieceIndex(initFile, initRank);
             pieces.get(index).pieceFile = nextFile;
             pieces.get(index).pieceRank = nextRank;
-
-            
-            // Check if the original piece is still at the initial position
-            /* 
-            int initialPieceIndex = findPieceIndex(initFile, initRank);
-            if (initialPieceIndex != -1) {
-                pieces.remove(initialPieceIndex);
-            }
-
-            // Reinstate the piece's type
-			index = findPieceIndex(nextFile, nextRank);
-			PieceType originalType = pieces.get(index).pieceType;
-            pieces.get(index).pieceType = originalType;
-            */
 
             littleBoy.piecesOnBoard = pieces;
 
