@@ -23,7 +23,58 @@ public class Chess {
         }
         return -1;
     }
+    public static boolean isKingInCheck(char turn, PieceFile nextFile, int nextRank) {
+        // Get the current player's king
+        ReturnPiece king = getKing(turn);
+        if (king == null) {
+            return false; // No king found (should not happen in a valid game)
+        }
 
+        PieceFile kingFile = king.pieceFile;
+        int kingRank = king.pieceRank;
+        char oppositeTurn = (turn == 'w') ? 'b' : 'w';
+
+        // Iterate through all pieces to see if any can attack the king
+        for (ReturnPiece piece : pieces) {
+            if (Character.toLowerCase(piece.pieceType.toString().charAt(0)) == oppositeTurn) {
+                boolean check = false;
+                if (piece.pieceType == PieceType.WP || piece.pieceType == PieceType.BP) {
+                    Pawn pawn = (Pawn) piece;
+                    check = pawn.canMove(pawn.getPieceFile(), pawn.getPieceRank(), kingFile, kingRank, oppositeTurn);
+                } else if (piece.pieceType == PieceType.WR || piece.pieceType == PieceType.BR) {
+                    Rook rook = (Rook) piece;
+                    check = rook.canMove(rook.getPieceFile(), rook.getPieceRank(), kingFile, kingRank, oppositeTurn);
+                } else if (piece.pieceType == PieceType.WN || piece.pieceType == PieceType.BN) {
+                    Knight knight = (Knight) piece;
+                    check = knight.canMove(knight.getPieceFile(), knight.getPieceRank(), kingFile, kingRank, oppositeTurn);
+                } else if (piece.pieceType == PieceType.WB || piece.pieceType == PieceType.BB) {
+                    Bishop bishop = (Bishop) piece;
+                    check = bishop.canMove(bishop.getPieceFile(), bishop.getPieceRank(), kingFile, kingRank, oppositeTurn);
+                } else if (piece.pieceType == PieceType.WQ || piece.pieceType == PieceType.BQ) {
+                    Queen queen = (Queen) piece;
+                    check = queen.canMove(queen.getPieceFile(), queen.getPieceRank(), kingFile, kingRank, oppositeTurn);
+                } else if (piece.pieceType == PieceType.WK || piece.pieceType == PieceType.BK) {
+                    King kingPiece = (King) piece;
+                    check = kingPiece.canMove(kingPiece.getPieceFile(), kingPiece.getPieceRank(), kingFile, kingRank, oppositeTurn);
+                }
+                if (check) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static ReturnPiece getKing(char turn) {
+        // Iterate through all pieces to find the current player's king
+        for (ReturnPiece piece : pieces) {
+            if ((turn == 'w' && piece.pieceType == PieceType.WK) ||
+                (turn == 'b' && piece.pieceType == PieceType.BK)) {
+                return piece; // Return the king
+            }
+        }
+        return null; // No king found (should not happen in a valid game)
+    }
     public static ReturnPlay play(String move) { 
         ReturnPlay littleBoy = new ReturnPlay();
         littleBoy.message = null;
@@ -115,6 +166,10 @@ public class Chess {
             check = rook.canMove(initFile, initRank, nextFile, nextRank, turn);
         }
 
+        if (pieces.get(index).pieceType == PieceType.WK || pieces.get(index).pieceType == PieceType.BK) {
+            King king = (King) pieces.get(index);
+            check = king.canMove(initFile, initRank, nextFile, nextRank, turn);
+        }
         // Find the target position piece
         int targetIndex = findPieceIndex(nextFile, nextRank);
 
@@ -131,13 +186,19 @@ public class Chess {
                 }
             }
 
+            //Piece kingCheck = Piece.getKing();
+            //Check if the move puts the king in check
+
             // Move the piece to the new position
             index = findPieceIndex(initFile, initRank);
             pieces.get(index).pieceFile = nextFile;
             pieces.get(index).pieceRank = nextRank;
-
             littleBoy.piecesOnBoard = pieces;
-
+            boolean kingInCheck = isKingInCheck(turn, nextFile, nextRank);
+            if (kingInCheck) {
+                littleBoy.message = ReturnPlay.Message.CHECK;
+                //return littleBoy;
+            }
             // Switch the current player
             currentPlayer = (currentPlayer == Player.white) ? Player.black : Player.white;
 
@@ -147,7 +208,7 @@ public class Chess {
         } else {
             littleBoy.message = ReturnPlay.Message.ILLEGAL_MOVE;
         }
-
+        
         return littleBoy;
     }
 
