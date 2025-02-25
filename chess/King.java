@@ -6,22 +6,25 @@ public class King extends Piece {
     }
     
     public boolean canMove(PieceFile currFile, int currRank, PieceFile nextFile, int nextRank, char turn) {
-        // turn will either be 'b' or 'w'
-        if (isWithinBoard(nextFile, nextRank)) {
-            if (Math.abs(currFile.ordinal() - nextFile.ordinal()) <= 1 && Math.abs(currRank - nextRank) <= 1) {
-                // Check for teamkill
-                if (!isSquareEmpty(nextFile, nextRank)) {
-                    if ((turn == 'w' && getPieceColorAtPosition(nextFile, nextRank) == 'b') ||
-                        (turn == 'b' && getPieceColorAtPosition(nextFile, nextRank) == 'w')) {
-                        return true;
-                    }
-                }
-                // Check for empty space
-                if (isSquareEmpty(nextFile, nextRank)) {
-                    return true;
-                }
+        // Ensure move is within board bounds
+        if (!isWithinBoard(nextFile, nextRank)) {
+            return false;
+        }
+
+        // Ensure move is only one square in any direction
+        if (Math.abs(currFile.ordinal() - nextFile.ordinal()) > 1 || Math.abs(currRank - nextRank) > 1) {
+            return false;
+        }
+
+        // Check if the target square has a piece
+        if (!isSquareEmpty(nextFile, nextRank)) {
+            // Prevent moving onto a friendly piece
+            if ((turn == 'w' && getPieceColorAtPosition(nextFile, nextRank) == 'w') ||
+                (turn == 'b' && getPieceColorAtPosition(nextFile, nextRank) == 'b')) {
+                return false;
             }
         }
-        return false;
+
+        return true; // Move is valid
     }
 }
