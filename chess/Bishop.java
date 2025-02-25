@@ -24,9 +24,9 @@ public class Bishop extends Piece {
                 int rank = currRank;
                 switch ((rankDifference > 0 ? 2 : 0) + (fileDifference > 0 ? 1 : 0)) {
                     case 3: //Down left
-                        while (rank != nextRank)
                         file = Piece.prev(file);
                         rank--;
+                        while (rank != nextRank)
                         {
                             if (!isSquareEmpty(file, rank))
                             {
@@ -52,9 +52,9 @@ public class Bishop extends Piece {
                         }
                         break;
                     case 1: //Up left
-                        while (rank != nextRank)
                         file = Piece.prev(file);
                         rank++;
+                        while (rank != nextRank)
                         {
                             if (!isSquareEmpty(file, rank))
                             {
@@ -66,9 +66,9 @@ public class Bishop extends Piece {
                         }
                         break;
                     case 0: //Up right
-                        while (rank != nextRank)
                         file = Piece.next(file);
                         rank++;
+                        while (rank != nextRank)
                         {
                             if (!isSquareEmpty(file, rank))
                             {
