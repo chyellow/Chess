@@ -80,10 +80,8 @@ public class Chess {
         littleBoy.message = null;
         littleBoy.piecesOnBoard = pieces;
 
-        // Trim leading and trailing spaces
         move = move.trim();
 
-        // Handle special moves
         if (move.equalsIgnoreCase("resign")) {
             littleBoy.message = currentPlayer == Player.white ? ReturnPlay.Message.RESIGN_WHITE_WINS : ReturnPlay.Message.RESIGN_BLACK_WINS;
             return littleBoy;
@@ -94,7 +92,6 @@ public class Chess {
             move = move.substring(0, move.length() - 5).trim();
         }
 
-        // Extract initial and next file and rank from the move string
         String[] parts = move.split(" ");
         if (parts.length < 2) {
             littleBoy.message = ReturnPlay.Message.ILLEGAL_MOVE;
@@ -106,43 +103,16 @@ public class Chess {
         char nextFileChar = parts[1].charAt(0);
         int nextRank = Character.getNumericValue(parts[1].charAt(1));
 
-        // Convert the file characters to the PieceFile enum
         PieceFile initFile = PieceFile.valueOf(String.valueOf(initFileChar));
         PieceFile nextFile = PieceFile.valueOf(String.valueOf(nextFileChar));
 
-        // Check if a move is recursive
         if ((initFile == nextFile) && (initRank == nextRank)) {
             littleBoy.message = ReturnPlay.Message.ILLEGAL_MOVE;
             return littleBoy;
         }
 
-        // Handle pawn promotion
-        PieceType promotionType = PieceType.WQ; // Default to queen
-        if (parts.length == 3) {
-            switch (parts[2].toUpperCase()) {
-                case "N":
-                    promotionType = currentPlayer == Player.white ? PieceType.WN : PieceType.BN;
-                    break;
-                case "R":
-                    promotionType = currentPlayer == Player.white ? PieceType.WR : PieceType.BR;
-                    break;
-                case "B":
-                    promotionType = currentPlayer == Player.white ? PieceType.WB : PieceType.BB;
-                    break;
-                case "Q":
-                    promotionType = currentPlayer == Player.white ? PieceType.WQ : PieceType.BQ;
-                    break;
-            }
-        }
-
-        // Find the initial piece
         int index = findPieceIndex(initFile, initRank);
-		if(index != -1){
-			PieceType originalType = pieces.get(index).pieceType;
-		}
-
         if (index == -1) {
-            // Piece not found
             littleBoy.message = ReturnPlay.Message.ILLEGAL_MOVE;
             return littleBoy;
         }
@@ -150,35 +120,42 @@ public class Chess {
         boolean check = false;
         char turn = currentPlayer == Player.white ? 'w' : 'b';
 
-        // Check if the piece is a pawn and if it can move
-        if (pieces.get(index).pieceType == PieceType.WP || pieces.get(index).pieceType == PieceType.BP) {
+        PieceType pieceType = pieces.get(index).pieceType;
+        
+        if (pieceType == PieceType.WP || pieceType == PieceType.BP) {
             Pawn pawn = (Pawn) pieces.get(index);
             check = pawn.canMove(initFile, initRank, nextFile, nextRank, turn);
-        }
-
-        if (pieces.get(index).pieceType == PieceType.WB || pieces.get(index).pieceType == PieceType.BB) {
+        } else if (pieceType == PieceType.WB || pieceType == PieceType.BB) {
             Bishop bishop = (Bishop) pieces.get(index);
             check = bishop.canMove(initFile, initRank, nextFile, nextRank, turn);
-        }
-
-        if (pieces.get(index).pieceType == PieceType.WR || pieces.get(index).pieceType == PieceType.BR) {
+        } else if (pieceType == PieceType.WR || pieceType == PieceType.BR) {
             Rook rook = (Rook) pieces.get(index);
             check = rook.canMove(initFile, initRank, nextFile, nextRank, turn);
-        }
-
-        if (pieces.get(index).pieceType == PieceType.WK || pieces.get(index).pieceType == PieceType.BK) {
+        } else if (pieceType == PieceType.WK || pieceType == PieceType.BK) {
             King king = (King) pieces.get(index);
             check = king.canMove(initFile, initRank, nextFile, nextRank, turn);
         }
-        // Find the target position piece
+
         int targetIndex = findPieceIndex(nextFile, nextRank);
 
         if (check) {
+            PieceFile originalFile = pieces.get(index).pieceFile;
+            int originalRank = pieces.get(index).pieceRank;
+            
+            pieces.get(index).pieceFile = nextFile;
+            pieces.get(index).pieceRank = nextRank;
+
+            boolean kingInCheck = isKingInCheck(turn, nextFile, nextRank);
+            if (kingInCheck) {
+                pieces.get(index).pieceFile = originalFile;
+                pieces.get(index).pieceRank = originalRank;
+                littleBoy.message = ReturnPlay.Message.ILLEGAL_MOVE;
+                return littleBoy;
+            }
+
             if (targetIndex != -1) {
-                // Check if the colors are opposite
                 if ((currentPlayer == Player.white && pieces.get(targetIndex).pieceType.toString().startsWith("B")) ||
                     (currentPlayer == Player.black && pieces.get(targetIndex).pieceType.toString().startsWith("W"))) {
-                    // Remove the opponent's piece
                     pieces.remove(targetIndex);
                 } else {
                     littleBoy.message = ReturnPlay.Message.ILLEGAL_MOVE;
@@ -186,20 +163,13 @@ public class Chess {
                 }
             }
 
-            //Piece kingCheck = Piece.getKing();
-            //Check if the move puts the king in check
-
-            // Move the piece to the new position
-            index = findPieceIndex(initFile, initRank);
-            pieces.get(index).pieceFile = nextFile;
-            pieces.get(index).pieceRank = nextRank;
             littleBoy.piecesOnBoard = pieces;
-            boolean kingInCheck = isKingInCheck(turn, nextFile, nextRank);
-            if (kingInCheck) {
+            
+            char opponentTurn = (currentPlayer == Player.white) ? 'b' : 'w';
+            if (isKingInCheck(opponentTurn, nextFile, nextRank)) {
                 littleBoy.message = ReturnPlay.Message.CHECK;
-                //return littleBoy;
             }
-            // Switch the current player
+
             currentPlayer = (currentPlayer == Player.white) ? Player.black : Player.white;
 
             if (drawRequested) {
