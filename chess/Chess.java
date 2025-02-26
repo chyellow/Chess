@@ -160,7 +160,13 @@ public class Chess {
         } else if (pieceType == PieceType.WK || pieceType == PieceType.BK) {
             King king = (King) pieces.get(index);
             check = king.canMove(initFile, initRank, nextFile, nextRank, turn);
-        }
+        } else if (pieceType == PieceType.WN || pieceType == PieceType.BN) {
+            Knight knight = (Knight) pieces.get(index);
+            check = knight.canMove(initFile, initRank, nextFile, nextRank, turn);
+        } else if (pieceType == PieceType.WQ || pieceType == PieceType.BQ) {
+            Queen queen = (Queen) pieces.get(index);
+            check = queen.canMove(initFile, initRank, nextFile, nextRank, turn);
+        } 
     
         if (!check) {
             littleBoy.message = ReturnPlay.Message.ILLEGAL_MOVE;
