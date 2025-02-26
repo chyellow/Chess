@@ -75,7 +75,6 @@ public class Chess {
         }
         return null; // No king found (should not happen in a valid game)
     }
-    
     public static ReturnPlay play(String move) { 
         ReturnPlay littleBoy = new ReturnPlay();
         littleBoy.message = null;
@@ -113,7 +112,7 @@ public class Chess {
         }
         
         // Handle pawn promotion
-        PieceType promotionType = PieceType.WQ; // Default to queen
+        PieceType promotionType = currentPlayer == Player.white ? PieceType.WQ : PieceType.BQ; // Default to queen
         if (parts.length == 3) {
             switch (parts[2].toUpperCase()) {
                 case "N":
@@ -245,7 +244,7 @@ public class Chess {
         for (ReturnPiece piece : pieces) {
             if (piece.pieceType == PieceType.WP || piece.pieceType == PieceType.BP) {
                 Pawn pawn = (Pawn) piece;
-                pawn.movedTwo = false;
+                pawn.numTurns++;
             }
         }
 

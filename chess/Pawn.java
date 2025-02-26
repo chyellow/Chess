@@ -5,7 +5,7 @@ public class Pawn extends Piece {
     boolean hasMoved = false;
     boolean movedTwo = false;
     boolean enPassant = false;
-    static int numTurns = 0;
+    int numTurns = 0;
     int movedTwoTurn = -1;
     public Pawn(PieceType pieceType, PieceFile pieceFile, int pieceRank) {
         super(pieceType, pieceFile, pieceRank);
