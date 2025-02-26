@@ -83,7 +83,7 @@ public class Chess {
         move = move.trim();
     
         if (move.equalsIgnoreCase("resign")) {
-            littleBoy.message = currentPlayer == Player.white ? ReturnPlay.Message.RESIGN_WHITE_WINS : ReturnPlay.Message.RESIGN_BLACK_WINS;
+            littleBoy.message = currentPlayer == Player.white ? ReturnPlay.Message.RESIGN_BLACK_WINS : ReturnPlay.Message.RESIGN_WHITE_WINS;
             return littleBoy;
         }
     
