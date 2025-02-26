@@ -110,7 +110,26 @@ public class Chess {
             littleBoy.message = ReturnPlay.Message.ILLEGAL_MOVE;
             return littleBoy;
         }
-    
+        
+        // Handle pawn promotion
+        PieceType promotionType = PieceType.WQ; // Default to queen
+        if (parts.length == 3) {
+            switch (parts[2].toUpperCase()) {
+                case "N":
+                    promotionType = currentPlayer == Player.white ? PieceType.WN : PieceType.BN;
+                    break;
+                case "R":
+                    promotionType = currentPlayer == Player.white ? PieceType.WR : PieceType.BR;
+                    break;
+                case "B":
+                    promotionType = currentPlayer == Player.white ? PieceType.WB : PieceType.BB;
+                    break;
+                case "Q":
+                    promotionType = currentPlayer == Player.white ? PieceType.WQ : PieceType.BQ;
+                    break;
+            }
+        }
+
         int index = findPieceIndex(initFile, initRank);
         if (index == -1) {
             littleBoy.message = ReturnPlay.Message.ILLEGAL_MOVE;
@@ -177,7 +196,21 @@ public class Chess {
                 return littleBoy;
             }
         }
-    
+        
+        // Handle pawn promotion
+        if ((pieceType == PieceType.WP && nextRank == 8) || (pieceType == PieceType.BP && nextRank == 1)) {
+            pieces.remove(index);
+            if (promotionType == PieceType.WN || promotionType == PieceType.BN) {
+                pieces.add(new Knight(promotionType, nextFile, nextRank));
+            } else if (promotionType == PieceType.WR || promotionType == PieceType.BR) {
+                pieces.add(new Rook(promotionType, nextFile, nextRank));
+            } else if (promotionType == PieceType.WB || promotionType == PieceType.BB) {
+                pieces.add(new Bishop(promotionType, nextFile, nextRank));
+            } else {
+                pieces.add(new Queen(promotionType, nextFile, nextRank));
+            }
+        }
+        
         littleBoy.piecesOnBoard = pieces;
         
         // Check if opponent's king is now in check
