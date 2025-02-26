@@ -23,7 +23,7 @@ public class Chess {
         }
         return -1;
     }
-    public static boolean isKingInCheck(char turn, PieceFile nextFile, int nextRank) {
+    public static boolean isKingInCheck(char turn) {
         // Get the current player's king
         ReturnPiece king = getKing(turn);
         if (king == null) {
@@ -159,7 +159,7 @@ public class Chess {
         pieces.get(index).pieceRank = nextRank;
     
         // Ensure the move doesn't leave the player's own king in check
-        if (isKingInCheck(turn, nextFile, nextRank)) {
+        if (isKingInCheck(turn)) {
             // Undo the move
             pieces.get(index).pieceFile = originalFile;
             pieces.get(index).pieceRank = originalRank;
@@ -182,7 +182,7 @@ public class Chess {
         
         // Check if opponent's king is now in check
         char opponentTurn = (currentPlayer == Player.white) ? 'b' : 'w';
-        if (isKingInCheck(opponentTurn, nextFile, nextRank)) {
+        if (isKingInCheck(opponentTurn)) {
             littleBoy.message = ReturnPlay.Message.CHECK;
         }
     
