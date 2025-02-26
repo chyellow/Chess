@@ -75,6 +75,7 @@ public class Chess {
         }
         return null; // No king found (should not happen in a valid game)
     }
+    
     public static ReturnPlay play(String move) { 
         ReturnPlay littleBoy = new ReturnPlay();
         littleBoy.message = null;
@@ -203,6 +204,18 @@ public class Chess {
             }
         }
         
+        // Handle en passant capture
+        if (pieceType == PieceType.WP || pieceType == PieceType.BP) {
+            Pawn pawn = (Pawn) pieces.get(index);
+            if (pawn.movedTwo && Math.abs(initFile.ordinal() - nextFile.ordinal()) == 1 && Math.abs(initRank - nextRank) == 1) {
+                int capturedPawnRank = (turn == 'w') ? nextRank - 1 : nextRank + 1;
+                int capturedPawnIndex = findPieceIndex(nextFile, capturedPawnRank);
+                if (capturedPawnIndex != -1 && pieces.get(capturedPawnIndex).pieceType == (turn == 'w' ? PieceType.BP : PieceType.WP)) {
+                    pieces.remove(capturedPawnIndex);
+                }
+            }
+        }
+
         // Handle pawn promotion
         if ((pieceType == PieceType.WP && nextRank == 8) || (pieceType == PieceType.BP && nextRank == 1)) {
             pieces.remove(index);
@@ -228,6 +241,14 @@ public class Chess {
         // Change turn only after a successful move
         currentPlayer = (currentPlayer == Player.white) ? Player.black : Player.white;
     
+        // Reset movedTwo flag for all pawns
+        for (ReturnPiece piece : pieces) {
+            if (piece.pieceType == PieceType.WP || piece.pieceType == PieceType.BP) {
+                Pawn pawn = (Pawn) piece;
+                pawn.movedTwo = false;
+            }
+        }
+
         if (drawRequested) {
             littleBoy.message = ReturnPlay.Message.DRAW;
         }
