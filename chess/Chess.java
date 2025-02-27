@@ -185,21 +185,31 @@ public class Chess {
         int kingRank = king.pieceRank;
 
     
-        // Handle capturing
+        ReturnPiece capturedPiece = null;
         if (targetIndex != -1) {
-            if ((currentPlayer == Player.white && pieces.get(targetIndex).pieceType.toString().startsWith("B")) ||
-                (currentPlayer == Player.black && pieces.get(targetIndex).pieceType.toString().startsWith("W"))) {
-                pieces.remove(targetIndex);
+            ReturnPiece targetPiece = pieces.get(targetIndex);
+            if ((currentPlayer == Player.white && targetPiece.pieceType.toString().startsWith("B")) ||
+                (currentPlayer == Player.black && targetPiece.pieceType.toString().startsWith("W"))) {
+                
+                // Temporarily store the captured piece in case we need to revert the move
+                capturedPiece = pieces.remove(targetIndex);
             } else {
                 littleBoy.message = ReturnPlay.Message.ILLEGAL_MOVE;
                 return littleBoy;
             }
         }
         
+        // Check if the move leaves the king in check
         if (isKingInCheck(turn, kingFile, kingRank)) {
             // Undo the move
             pieces.get(index).pieceFile = originalFile;
             pieces.get(index).pieceRank = originalRank;
+        
+            // Restore the captured piece if there was one
+            if (capturedPiece != null) {
+                pieces.add(targetIndex, capturedPiece); // Reinsert the captured piece back to its original position
+            }
+        
             littleBoy.message = ReturnPlay.Message.ILLEGAL_MOVE;
             return littleBoy;
         }
