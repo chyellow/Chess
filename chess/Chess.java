@@ -184,13 +184,6 @@ public class Chess {
         PieceFile kingFile = king.pieceFile;
         int kingRank = king.pieceRank;
 
-        if (isKingInCheck(turn, kingFile, kingRank)) {
-            // Undo the move
-            pieces.get(index).pieceFile = originalFile;
-            pieces.get(index).pieceRank = originalRank;
-            littleBoy.message = ReturnPlay.Message.ILLEGAL_MOVE;
-            return littleBoy;
-        }
     
         // Handle capturing
         if (targetIndex != -1) {
@@ -203,6 +196,14 @@ public class Chess {
             }
         }
         
+        if (isKingInCheck(turn, kingFile, kingRank)) {
+            // Undo the move
+            pieces.get(index).pieceFile = originalFile;
+            pieces.get(index).pieceRank = originalRank;
+            littleBoy.message = ReturnPlay.Message.ILLEGAL_MOVE;
+            return littleBoy;
+        }
+
         // Handle en passant capture
         if (pieceType == PieceType.WP || pieceType == PieceType.BP) {
             Pawn pawn = (Pawn) pieces.get(index);
