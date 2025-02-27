@@ -31,23 +31,23 @@ public class Chess {
             if (Character.toLowerCase(piece.pieceType.toString().charAt(0)) == oppositeTurn) {
                 boolean check = false;
                 if (piece.pieceType == PieceType.WP || piece.pieceType == PieceType.BP) {
-                    Pawn pawn = (Pawn) piece;
-                    check = pawn.canMove(pawn.getPieceFile(), pawn.getPieceRank(), kingFile, kingRank, oppositeTurn);
+                    Pawn tempPawn = new Pawn(piece.pieceType, piece.pieceFile, piece.pieceRank);
+                    check = tempPawn.canMove(tempPawn.getPieceFile(), tempPawn.getPieceRank(), kingFile, kingRank, oppositeTurn);
                 } else if (piece.pieceType == PieceType.WR || piece.pieceType == PieceType.BR) {
-                    Rook rook = (Rook) piece;
-                    check = rook.canMove(rook.getPieceFile(), rook.getPieceRank(), kingFile, kingRank, oppositeTurn);
+                    Rook tempRook = new Rook(piece.pieceType, piece.pieceFile, piece.pieceRank);
+                    check = tempRook.canMove(tempRook.getPieceFile(), tempRook.getPieceRank(), kingFile, kingRank, oppositeTurn);
                 } else if (piece.pieceType == PieceType.WN || piece.pieceType == PieceType.BN) {
-                    Knight knight = (Knight) piece;
-                    check = knight.canMove(knight.getPieceFile(), knight.getPieceRank(), kingFile, kingRank, oppositeTurn);
+                    Knight tempKnight = new Knight(piece.pieceType, piece.pieceFile, piece.pieceRank);
+                    check = tempKnight.canMove(tempKnight.getPieceFile(), tempKnight.getPieceRank(), kingFile, kingRank, oppositeTurn);
                 } else if (piece.pieceType == PieceType.WB || piece.pieceType == PieceType.BB) {
-                    Bishop bishop = (Bishop) piece;
-                    check = bishop.canMove(bishop.getPieceFile(), bishop.getPieceRank(), kingFile, kingRank, oppositeTurn);
+                    Bishop tempBishop = new Bishop(piece.pieceType, piece.pieceFile, piece.pieceRank);
+                    check = tempBishop.canMove(tempBishop.getPieceFile(), tempBishop.getPieceRank(), kingFile, kingRank, oppositeTurn);
                 } else if (piece.pieceType == PieceType.WQ || piece.pieceType == PieceType.BQ) {
-                    Queen queen = (Queen) piece;
-                    check = queen.canMove(queen.getPieceFile(), queen.getPieceRank(), kingFile, kingRank, oppositeTurn);
+                    Queen tempQueen = new Queen(piece.pieceType, piece.pieceFile, piece.pieceRank);
+                    check = tempQueen.canMove(tempQueen.getPieceFile(), tempQueen.getPieceRank(), kingFile, kingRank, oppositeTurn);
                 } else if (piece.pieceType == PieceType.WK || piece.pieceType == PieceType.BK) {
-                    King kingPiece = (King) piece;
-                    check = kingPiece.canMove(kingPiece.getPieceFile(), kingPiece.getPieceRank(), kingFile, kingRank, oppositeTurn);
+                    King tempKing = new King(piece.pieceType, piece.pieceFile, piece.pieceRank);
+                    check = tempKing.canMove(tempKing.getPieceFile(), tempKing.getPieceRank(), kingFile, kingRank, oppositeTurn);
                 }
                 if (check) {
                     return true;
@@ -141,24 +141,24 @@ public class Chess {
         boolean check = false;
         
         if (pieceType == PieceType.WP || pieceType == PieceType.BP) {
-            Pawn pawn = (Pawn) pieces.get(index);
-            check = pawn.canMove(initFile, initRank, nextFile, nextRank, turn);
+            Pawn tempPawn = new Pawn(pieceType, initFile, initRank);
+            check = tempPawn.canMove(initFile, initRank, nextFile, nextRank, turn);
         } else if (pieceType == PieceType.WB || pieceType == PieceType.BB) {
-            Bishop bishop = (Bishop) pieces.get(index);
-            check = bishop.canMove(initFile, initRank, nextFile, nextRank, turn);
+            Bishop tempBishop = new Bishop(pieceType, initFile, initRank);
+            check = tempBishop.canMove(initFile, initRank, nextFile, nextRank, turn);
         } else if (pieceType == PieceType.WR || pieceType == PieceType.BR) {
-            Rook rook = (Rook) pieces.get(index);
-            check = rook.canMove(initFile, initRank, nextFile, nextRank, turn);
+            Rook tempRook = new Rook(pieceType, initFile, initRank);
+            check = tempRook.canMove(initFile, initRank, nextFile, nextRank, turn);
         } else if (pieceType == PieceType.WK || pieceType == PieceType.BK) {
-            King king = (King) pieces.get(index);
-            check = king.canMove(initFile, initRank, nextFile, nextRank, turn);
+            King tempKing = new King(pieceType, initFile, initRank);
+            check = tempKing.canMove(initFile, initRank, nextFile, nextRank, turn);
         } else if (pieceType == PieceType.WN || pieceType == PieceType.BN) {
-            Knight knight = (Knight) pieces.get(index);
-            check = knight.canMove(initFile, initRank, nextFile, nextRank, turn);
+            Knight tempKnight = new Knight(pieceType, initFile, initRank);
+            check = tempKnight.canMove(initFile, initRank, nextFile, nextRank, turn);
         } else if (pieceType == PieceType.WQ || pieceType == PieceType.BQ) {
-            Queen queen = (Queen) pieces.get(index);
-            check = queen.canMove(initFile, initRank, nextFile, nextRank, turn);
-        } 
+            Queen tempQueen = new Queen(pieceType, initFile, initRank);
+            check = tempQueen.canMove(initFile, initRank, nextFile, nextRank, turn);
+        }
     
         if (!check) {
             littleBoy.message = ReturnPlay.Message.ILLEGAL_MOVE;
