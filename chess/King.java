@@ -21,7 +21,7 @@ public class King extends Piece {
                     {
                         if (!Chess.isKingInCheck(turn, PieceFile.f, 1) && !Chess.isKingInCheck(turn, PieceFile.g, 1))
                         {
-                            //move Rook
+                            //Move rook
                             this.hasMoved = true;
                             return true;
                         }
@@ -69,7 +69,8 @@ public class King extends Piece {
                     {
                         if (!Chess.isKingInCheck(turn, PieceFile.b, 8) && !Chess.isKingInCheck(turn, PieceFile.c, 8) && !Chess.isKingInCheck(turn, PieceFile.d, 8))
                         {
-                            //move Rook
+                            rook.hasMoved = true;
+                            rook.pieceFile = PieceFile.d;
                             this.hasMoved = true;
                             return true;
                         }
