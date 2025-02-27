@@ -1,8 +1,8 @@
 package chess;
 
-import java.util.ArrayList;
-import chess.ReturnPiece.PieceType;
 import chess.ReturnPiece.PieceFile;
+import chess.ReturnPiece.PieceType;
+import java.util.ArrayList;
 
 public class Chess {
 
@@ -23,15 +23,7 @@ public class Chess {
         }
         return -1;
     }
-    public static boolean isKingInCheck(char turn) {
-        // Get the current player's king
-        ReturnPiece king = getKing(turn);
-        if (king == null) {
-            return false; // No king found (should not happen in a valid game)
-        }
-
-        PieceFile kingFile = king.pieceFile;
-        int kingRank = king.pieceRank;
+    public static boolean isKingInCheck(char turn, PieceFile kingFile, int kingRank) {
         char oppositeTurn = (turn == 'w') ? 'b' : 'w';
 
         // Iterate through all pieces to see if any can attack the king
@@ -184,7 +176,15 @@ public class Chess {
         pieces.get(index).pieceRank = nextRank;
     
         // Ensure the move doesn't leave the player's own king in check
-        if (isKingInCheck(turn)) {
+        ReturnPiece king = getKing(turn);
+        // Get the current player's king
+        if (king == null) {
+            return littleBoy; // No king found (should not happen in a valid game)
+        }
+        PieceFile kingFile = king.pieceFile;
+        int kingRank = king.pieceRank;
+
+        if (isKingInCheck(turn, kingFile, kingRank)) {
             // Undo the move
             pieces.get(index).pieceFile = originalFile;
             pieces.get(index).pieceRank = originalRank;
@@ -233,7 +233,14 @@ public class Chess {
         
         // Check if opponent's king is now in check
         char opponentTurn = (currentPlayer == Player.white) ? 'b' : 'w';
-        if (isKingInCheck(opponentTurn)) {
+        king = getKing(opponentTurn);
+        // Get the current player's king
+        if (king == null) {
+            return littleBoy; // No king found (should not happen in a valid game)
+        }
+        kingFile = king.pieceFile;
+        kingRank = king.pieceRank;
+        if (isKingInCheck(opponentTurn, kingFile, kingRank)) {
             littleBoy.message = ReturnPlay.Message.CHECK;
         }
     

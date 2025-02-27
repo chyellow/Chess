@@ -90,6 +90,42 @@ public class Piece extends ReturnPiece {
         return null; // No pawn found at the given position
     }
 
+    public King getWhiteKing(PieceFile pieceFile, int pieceRank) {
+        for (ReturnPiece piece : pieces) {
+            if (piece.pieceFile == pieceFile && piece.pieceRank == pieceRank && (piece.pieceType == PieceType.WK)) {
+                return (King) piece;
+            }
+        }
+        return null; // No king found at the given position
+    }
+
+    public King getBlackKing(PieceFile pieceFile, int pieceRank) {
+        for (ReturnPiece piece : pieces) {
+            if (piece.pieceFile == pieceFile && piece.pieceRank == pieceRank && (piece.pieceType == PieceType.BK)) {
+                return (King) piece;
+            }
+        }
+        return null; // No king found at the given position
+    }
+
+    public Rook getWhiteRook(PieceFile pieceFile, int pieceRank) {
+        for (ReturnPiece piece : pieces) {
+            if (piece.pieceFile == pieceFile && piece.pieceRank == pieceRank && (piece.pieceType == PieceType.WR)) {
+                return (Rook) piece;
+            }
+        }
+        return null; // No rook found at the given position
+    }
+
+    public Rook getBlackRook(PieceFile pieceFile, int pieceRank) {
+        for (ReturnPiece piece : pieces) {
+            if (piece.pieceFile == pieceFile && piece.pieceRank == pieceRank && (piece.pieceType == PieceType.BR)) {
+                return (Rook) piece;
+            }
+        }
+        return null; // No rook found at the given position
+    }
+
     public static PieceFile next(PieceFile file) {
         return PieceFile.values()[(file.ordinal() + 1) % PieceFile.values().length];
     }

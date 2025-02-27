@@ -1,8 +1,10 @@
 package chess;
 
 public class Rook extends Piece {
+    boolean hasMoved = false;
     public Rook(PieceType pieceType, PieceFile pieceFile, int pieceRank) {
         super(pieceType, pieceFile, pieceRank);
+        this.hasMoved = false;
     }
     
     public boolean canMove(PieceFile currFile, int currRank, PieceFile nextFile, int nextRank, char turn)   //turn will either be 'b' or 'w'
@@ -78,11 +80,13 @@ public class Rook extends Piece {
                 {
                     if((turn == 'w') && (getPieceColorAtPosition(nextFile, nextRank) == 'b'))
                     {
+                        this.hasMoved = true;
                         return true;
                     }
 
                     if((turn == 'b') && (getPieceColorAtPosition(nextFile, nextRank) == 'w'))
                     {
+                        this.hasMoved = true;
                         return true;
                     }
                 }
@@ -90,6 +94,7 @@ public class Rook extends Piece {
                 //Check for empty space
                 if(isSquareEmpty(nextFile, nextRank))
                 {
+                    this.hasMoved = true;
                     return true;
                 }
             }
