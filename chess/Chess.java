@@ -1,3 +1,5 @@
+//Ryan Proce rp1210 Christopher Hellriegel (cmh375)
+
 package chess;
 
 
@@ -112,227 +114,598 @@ public class Chess {
         ArrayList<PieceFile> validFiles = new ArrayList<>();
         int ogRank;
         PieceFile ogFile;
+        int targetIndex = -1;
+        ReturnPiece capturedPiece = null;
 
 
-        for (ReturnPiece piece : pieces)
+        //HAHAH HAHAH HAHAHA HAHAHA HAHAHA HAHAHA HAHAHA HAHAHA HAHAHA HAHAHA HAHAHA HAHAHA HAHAHAAH
+        if (turn == 'w')
         {
-            ogFile = piece.pieceFile;
-            ogRank = piece.pieceRank;
-            if (piece.pieceType == PieceType.WP)
+            for (ReturnPiece piece : pieces)
             {
-                Pawn tempPawn = new Pawn(piece.pieceType, piece.pieceFile, piece.pieceRank);
-                for (pieceRank = 1; pieceRank <= 8; pieceRank++)
+                ogFile = piece.pieceFile;
+                ogRank = piece.pieceRank;
+                if (piece.pieceType == PieceType.WP)
                 {
-                    count = 1;
-                    while(count <= 8)
+                    Pawn tempPawn = new Pawn(piece.pieceType, piece.pieceFile, piece.pieceRank);
+                    for (pieceRank = 1; pieceRank <= 8; pieceRank++)
                     {
-                        if(tempPawn.canMove(tempPawn.getPieceFile(), tempPawn.getPieceRank(), pieceFile, pieceRank, turn))
+                        count = 1;
+                        while(count <= 8)
                         {
-                            validFiles.add(pieceFile);
-                            validRanks.add(pieceRank);
+                            if(!((pieceFile == tempPawn.getPieceFile()) && (pieceRank == tempPawn.getPieceRank())) && tempPawn.canMove(tempPawn.getPieceFile(), tempPawn.getPieceRank(), pieceFile, pieceRank, turn))
+                            {
+                                validFiles.add(pieceFile);
+                                validRanks.add(pieceRank);
+                            }
+
+
+                            count++;
+                            pieceFile = Piece.next(pieceFile);
                         }
-
-
-                        count++;
-                        pieceFile = Piece.next(pieceFile);
                     }
-                }
 
 
-                //Using list of possible moves, go through them and for each one check if the move changes check status
-                for (int i = 0; i < validRanks.size(); i++)
-                {
-                    piece.pieceFile = validFiles.get(i);
-                    piece.pieceRank = validRanks.get(i);
-                    if (!isKingInCheck(turn, kingFile, kingRank))
+                    //Using list of possible moves, go through them and for each one check if the move changes check status
+                    for (int i = 0; i < validRanks.size(); i++) 
                     {
-                        piece.pieceFile = ogFile;
-                        piece.pieceRank = ogRank;
-                        return false;
-                    }
-                }
-
-
-                validFiles.clear();
-                validRanks.clear();
-                piece.pieceFile = ogFile;
-                piece.pieceRank = ogRank;
-            }
-
-
-            if (piece.pieceType == PieceType.WB)
-            {
-                Bishop tempBishop = new Bishop(piece.pieceType, piece.pieceFile, piece.pieceRank);
-                for (pieceRank = 1; pieceRank <= 8; pieceRank++)
-                {
-                    count = 1;
-                    while(count <= 8)
-                    {
-                        if(tempBishop.canMove(tempBishop.getPieceFile(), tempBishop.getPieceRank(), pieceFile, pieceRank, turn))
+                        piece.pieceFile = validFiles.get(i);
+                        piece.pieceRank = validRanks.get(i);
+                        if (!isKingInCheck(turn, kingFile, kingRank))
                         {
-                            validFiles.add(pieceFile);
-                            validRanks.add(pieceRank);
+                            piece.pieceFile = ogFile;
+                            piece.pieceRank = ogRank;
+                            return false;
                         }
-
-
-                        count++;
-                        pieceFile = Piece.next(pieceFile);
                     }
-                }
-
-
-                //Using list of possible moves, go through them and for each one check if the move changes check status
-                for (int i = 0; i < validRanks.size(); i++)
-                {
-                    piece.pieceFile = validFiles.get(i);
-                    piece.pieceRank = validRanks.get(i);
-                    if (!isKingInCheck(turn, kingFile, kingRank))
+                    piece.pieceFile = ogFile;
+                    piece.pieceRank = ogRank;
+                    for (int i = 0; i < validRanks.size(); i++) 
                     {
-                        piece.pieceFile = ogFile;
-                        piece.pieceRank = ogRank;
-                        return false;
-                    }
-                }
-
-
-                validFiles.clear();
-                validRanks.clear();
-                piece.pieceFile = ogFile;
-                piece.pieceRank = ogRank;
-            }
-
-
-            if (piece.pieceType == PieceType.WN)
-            {
-                Knight tempKnight = new Knight(piece.pieceType, piece.pieceFile, piece.pieceRank);
-                for (pieceRank = 1; pieceRank <= 8; pieceRank++)
-                {
-                    count = 1;
-                    while(count <= 8)
-                    {
-                        if(tempKnight.canMove(tempKnight.getPieceFile(), tempKnight.getPieceRank(), pieceFile, pieceRank, turn))
+                        if (!isSquareEmpty(validFiles.get(i), validRanks.get(i)))
                         {
-                            validFiles.add(pieceFile);
-                            validRanks.add(pieceRank);
+                            targetIndex = findPieceIndex(validFiles.get(i), validRanks.get(i));
+                            if (targetIndex != -1)
+                            {
+                                capturedPiece = pieces.remove(targetIndex);
+                                if (!isKingInCheck(turn, kingFile, kingRank))
+                                {
+                                    pieces.add(capturedPiece);
+                                    return false;
+                                }
+                                pieces.add(capturedPiece);
+                            }
                         }
-
-
-                        count++;
-                        pieceFile = Piece.next(pieceFile);
                     }
+                    validFiles.clear();
+                    validRanks.clear();
                 }
 
 
-                //Using list of possible moves, go through them and for each one check if the move changes check status
-                for (int i = 0; i < validRanks.size(); i++)
+                if (piece.pieceType == PieceType.WB)
                 {
-                    piece.pieceFile = validFiles.get(i);
-                    piece.pieceRank = validRanks.get(i);
-                    if (!isKingInCheck(turn, kingFile, kingRank))
+                    Bishop tempBishop = new Bishop(piece.pieceType, piece.pieceFile, piece.pieceRank);
+                    for (pieceRank = 1; pieceRank <= 8; pieceRank++)
                     {
-                        piece.pieceFile = ogFile;
-                        piece.pieceRank = ogRank;
-                        return false;
-                    }
-                }
-
-
-                validFiles.clear();
-                validRanks.clear();
-                piece.pieceFile = ogFile;
-                piece.pieceRank = ogRank;
-            }
-
-
-            if (piece.pieceType == PieceType.WR)
-            {
-                Rook tempRook = new Rook(piece.pieceType, piece.pieceFile, piece.pieceRank);
-                for (pieceRank = 1; pieceRank <= 8; pieceRank++)
-                {
-                    count = 1;
-                    while(count <= 8)
-                    {
-                        if(tempRook.canMove(tempRook.getPieceFile(), tempRook.getPieceRank(), pieceFile, pieceRank, turn))
+                        count = 1;
+                        while(count <= 8)
                         {
-                            validFiles.add(pieceFile);
-                            validRanks.add(pieceRank);
+                            if(!((pieceFile == tempBishop.getPieceFile()) && (pieceRank == tempBishop.getPieceRank())) && tempBishop.canMove(tempBishop.getPieceFile(), tempBishop.getPieceRank(), pieceFile, pieceRank, turn))
+                            {
+                                validFiles.add(pieceFile);
+                                validRanks.add(pieceRank);
+                            }
+
+
+                            count++;
+                            pieceFile = Piece.next(pieceFile);
                         }
-
-
-                        count++;
-                        pieceFile = Piece.next(pieceFile);
                     }
-                }
 
 
-                //Using list of possible moves, go through them and for each one check if the move changes check status
-                for (int i = 0; i < validRanks.size(); i++)
-                {
-                    piece.pieceFile = validFiles.get(i);
-                    piece.pieceRank = validRanks.get(i);
-                    System.out.println("Moves: " + validFiles.get(i).ordinal() + " " + validRanks.get(i));
-                    /*if (!isSquareEmpty(validFiles.get(i), validRanks.get(i)))
+                    //Using list of possible moves, go through them and for each one check if the move changes check status
+                    for (int i = 0; i < validRanks.size(); i++) 
                     {
-                        ReturnPiece tempPiece = new Piece(piece.pieceType, piece.pieceFile, piece.pieceRank);
-                    }*/
-                    if (!isKingInCheck(turn, kingFile, kingRank))
-                    {
-                        piece.pieceFile = ogFile;
-                        piece.pieceRank = ogRank;
-                        return false;
-                    }
-                }
-
-
-                validFiles.clear();
-                validRanks.clear();
-                piece.pieceFile = ogFile;
-                piece.pieceRank = ogRank;
-            }
-
-
-            if (piece.pieceType == PieceType.WQ)
-            {
-                Queen tempQueen = new Queen(piece.pieceType, piece.pieceFile, piece.pieceRank);
-                for (pieceRank = 1; pieceRank <= 8; pieceRank++)
-                {
-                    count = 1;
-                    while(count <= 8)
-                    {
-                        if(tempQueen.canMove(tempQueen.getPieceFile(), tempQueen.getPieceRank(), pieceFile, pieceRank, turn))
+                        piece.pieceFile = validFiles.get(i);
+                        piece.pieceRank = validRanks.get(i);
+                        if (!isKingInCheck(turn, kingFile, kingRank))
                         {
-                            validFiles.add(pieceFile);
-                            validRanks.add(pieceRank);
+                            piece.pieceFile = ogFile;
+                            piece.pieceRank = ogRank;
+                            return false;
                         }
-
-
-                        count++;
-                        pieceFile = Piece.next(pieceFile);
                     }
-                }
-
-
-                //Using list of possible moves, go through them and for each one check if the move changes check status
-                for (int i = 0; i < validRanks.size(); i++)
-                {
-                    piece.pieceFile = validFiles.get(i);
-                    piece.pieceRank = validRanks.get(i);
-                    if (!isKingInCheck(turn, kingFile, kingRank))
+                    piece.pieceFile = ogFile;
+                    piece.pieceRank = ogRank;
+                    for (int i = 0; i < validRanks.size(); i++) 
                     {
-                        piece.pieceFile = ogFile;
-                        piece.pieceRank = ogRank;
-                        return false;
+                        if (!isSquareEmpty(validFiles.get(i), validRanks.get(i)))
+                        {
+                            targetIndex = findPieceIndex(validFiles.get(i), validRanks.get(i));
+                            if (targetIndex != -1)
+                            {
+                                capturedPiece = pieces.remove(targetIndex);
+                                if (!isKingInCheck(turn, kingFile, kingRank))
+                                {
+                                    pieces.add(capturedPiece);
+                                    return false;
+                                }
+                                pieces.add(capturedPiece);
+                            }
+                        }
                     }
+                    validFiles.clear();
+                    validRanks.clear();
                 }
 
 
-                validFiles.clear();
-                validRanks.clear();
-                piece.pieceFile = ogFile;
-                piece.pieceRank = ogRank;
+                if (piece.pieceType == PieceType.WN)
+                {
+                    Knight tempKnight = new Knight(piece.pieceType, piece.pieceFile, piece.pieceRank);
+                    for (pieceRank = 1; pieceRank <= 8; pieceRank++)
+                    {
+                        count = 1;
+                        while(count <= 8)
+                        {
+                            if(!((pieceFile == tempKnight.getPieceFile()) && (pieceRank == tempKnight.getPieceRank())) && tempKnight.canMove(tempKnight.getPieceFile(), tempKnight.getPieceRank(), pieceFile, pieceRank, turn))
+                            {
+                                validFiles.add(pieceFile);
+                                validRanks.add(pieceRank);
+                            }
+
+
+                            count++;
+                            pieceFile = Piece.next(pieceFile);
+                        }
+                    }
+
+
+                    //Using list of possible moves, go through them and for each one check if the move changes check status
+                    for (int i = 0; i < validRanks.size(); i++) 
+                    {
+                        piece.pieceFile = validFiles.get(i);
+                        piece.pieceRank = validRanks.get(i);
+                        if (!isKingInCheck(turn, kingFile, kingRank))
+                        {
+                            piece.pieceFile = ogFile;
+                            piece.pieceRank = ogRank;
+                            return false;
+                        }
+                    }
+                    piece.pieceFile = ogFile;
+                    piece.pieceRank = ogRank;
+                    for (int i = 0; i < validRanks.size(); i++) 
+                    {
+                        if (!isSquareEmpty(validFiles.get(i), validRanks.get(i)))
+                        {
+                            targetIndex = findPieceIndex(validFiles.get(i), validRanks.get(i));
+                            if (targetIndex != -1)
+                            {
+                                capturedPiece = pieces.remove(targetIndex);
+                                if (!isKingInCheck(turn, kingFile, kingRank))
+                                {
+                                    pieces.add(capturedPiece);
+                                    return false;
+                                }
+                                pieces.add(capturedPiece);
+                            }
+                        }
+                    }
+                    validFiles.clear();
+                    validRanks.clear();
+                }
+
+
+                if (piece.pieceType == PieceType.WR)
+                {
+                    Rook tempRook = new Rook(piece.pieceType, piece.pieceFile, piece.pieceRank);
+                    for (pieceRank = 1; pieceRank <= 8; pieceRank++)
+                    {
+                        count = 1;
+                        while(count <= 8)
+                        {
+                            if(!((pieceFile == tempRook.getPieceFile()) && (pieceRank == tempRook.getPieceRank())) && tempRook.canMove(tempRook.getPieceFile(), tempRook.getPieceRank(), pieceFile, pieceRank, turn))
+                            {
+                                validFiles.add(pieceFile);
+                                validRanks.add(pieceRank);
+                            }
+
+
+                            count++;
+                            pieceFile = Piece.next(pieceFile);
+                        }
+                    }
+
+
+                    //Using list of possible moves, go through them and for each one check if the move changes check status
+                    for (int i = 0; i < validRanks.size(); i++) 
+                    {
+                        piece.pieceFile = validFiles.get(i);
+                        piece.pieceRank = validRanks.get(i);
+                        if (!isKingInCheck(turn, kingFile, kingRank))
+                        {
+                            piece.pieceFile = ogFile;
+                            piece.pieceRank = ogRank;
+                            return false;
+                        }
+                    }
+                    piece.pieceFile = ogFile;
+                    piece.pieceRank = ogRank;
+                    for (int i = 0; i < validRanks.size(); i++) 
+                    {
+                        if (!isSquareEmpty(validFiles.get(i), validRanks.get(i)))
+                        {
+                            targetIndex = findPieceIndex(validFiles.get(i), validRanks.get(i));
+                            if (targetIndex != -1)
+                            {
+                                capturedPiece = pieces.remove(targetIndex);
+                                if (!isKingInCheck(turn, kingFile, kingRank))
+                                {
+                                    pieces.add(capturedPiece);
+                                    return false;
+                                }
+                                pieces.add(capturedPiece);
+                            }
+                        }
+                    }
+                    validFiles.clear();
+                    validRanks.clear();
+                }
+
+
+                if (piece.pieceType == PieceType.WQ)
+                {
+                    Queen tempQueen = new Queen(piece.pieceType, piece.pieceFile, piece.pieceRank);
+                    for (pieceRank = 1; pieceRank <= 8; pieceRank++)
+                    {
+                        count = 1;
+                        while(count <= 8)
+                        {
+                            if(!((pieceFile == tempQueen.getPieceFile()) && (pieceRank == tempQueen.getPieceRank())) && tempQueen.canMove(tempQueen.getPieceFile(), tempQueen.getPieceRank(), pieceFile, pieceRank, turn))
+                            {
+                                validFiles.add(pieceFile);
+                                validRanks.add(pieceRank);
+                            }
+
+
+                            count++;
+                            pieceFile = Piece.next(pieceFile);
+                        }
+                    }
+
+
+                    //Using list of possible moves, go through them and for each one check if the move changes check status
+                    for (int i = 0; i < validRanks.size(); i++) 
+                    {
+                        piece.pieceFile = validFiles.get(i);
+                        piece.pieceRank = validRanks.get(i);
+                        if (!isKingInCheck(turn, kingFile, kingRank))
+                        {
+                            piece.pieceFile = ogFile;
+                            piece.pieceRank = ogRank;
+                            return false;
+                        }
+                    }
+                    piece.pieceFile = ogFile;
+                    piece.pieceRank = ogRank;
+                    for (int i = 0; i < validRanks.size(); i++) 
+                    {
+                        if (!isSquareEmpty(validFiles.get(i), validRanks.get(i)))
+                        {
+                            targetIndex = findPieceIndex(validFiles.get(i), validRanks.get(i));
+                            if (targetIndex != -1)
+                            {
+                                capturedPiece = pieces.remove(targetIndex);
+                                if (!isKingInCheck(turn, kingFile, kingRank))
+                                {
+                                    pieces.add(capturedPiece);
+                                    return false;
+                                }
+                                pieces.add(capturedPiece);
+                            }
+                        }
+                    }
+                    validFiles.clear();
+                    validRanks.clear();
+                }
             }
         }
 
+        else if (turn == 'b')
+        {
+            for (ReturnPiece piece : pieces)
+            {
+                ogFile = piece.pieceFile;
+                ogRank = piece.pieceRank;
+                if (piece.pieceType == PieceType.BP)
+                {
+                    System.out.println("im black p");
+                    Pawn tempPawn = new Pawn(piece.pieceType, piece.pieceFile, piece.pieceRank);
+                    for (pieceRank = 1; pieceRank <= 8; pieceRank++)
+                    {
+                        count = 1;
+                        while(count <= 8)
+                        {
+                            if(!((pieceFile == tempPawn.getPieceFile()) && (pieceRank == tempPawn.getPieceRank())) && tempPawn.canMove(tempPawn.getPieceFile(), tempPawn.getPieceRank(), pieceFile, pieceRank, turn))
+                            {
+                                validFiles.add(pieceFile);
+                                validRanks.add(pieceRank);
+                            }
+    
+    
+                            count++;
+                            pieceFile = Piece.next(pieceFile);
+                        }
+                    }
+    
+    
+                    //Using list of possible moves, go through them and for each one check if the move changes check status
+                    for (int i = 0; i < validRanks.size(); i++) 
+                    {
+                        piece.pieceFile = validFiles.get(i);
+                        piece.pieceRank = validRanks.get(i);
+                        if (!isKingInCheck(turn, kingFile, kingRank))
+                        {
+                            piece.pieceFile = ogFile;
+                            piece.pieceRank = ogRank;
+                            return false;
+                        }
+                    }
+                    piece.pieceFile = ogFile;
+                    piece.pieceRank = ogRank;
+                    for (int i = 0; i < validRanks.size(); i++) 
+                    {
+                        if (!isSquareEmpty(validFiles.get(i), validRanks.get(i)))
+                        {
+                            targetIndex = findPieceIndex(validFiles.get(i), validRanks.get(i));
+                            if (targetIndex != -1)
+                            {
+                                capturedPiece = pieces.remove(targetIndex);
+                                if (!isKingInCheck(turn, kingFile, kingRank))
+                                {
+                                    pieces.add(capturedPiece);
+                                    return false;
+                                }
+                                pieces.add(capturedPiece);
+                            }
+                        }
+                    }
+                    validFiles.clear();
+                    validRanks.clear();
+                }
+    
+    
+                if (piece.pieceType == PieceType.BB)
+                {
+                    System.out.println("im black b");
+                    Bishop tempBishop = new Bishop(piece.pieceType, piece.pieceFile, piece.pieceRank);
+                    for (pieceRank = 1; pieceRank <= 8; pieceRank++)
+                    {
+                        count = 1;
+                        while(count <= 8)
+                        {
+                            if(!((pieceFile == tempBishop.getPieceFile()) && (pieceRank == tempBishop.getPieceRank())) && tempBishop.canMove(tempBishop.getPieceFile(), tempBishop.getPieceRank(), pieceFile, pieceRank, turn))
+                            {
+                                validFiles.add(pieceFile);
+                                validRanks.add(pieceRank);
+                            }
+    
+                            count++;
+                            pieceFile = Piece.next(pieceFile);
+                        }
+                    }
+    
+    
+                    //Using list of possible moves, go through them and for each one check if the move changes check status
+                    for (int i = 0; i < validRanks.size(); i++) 
+                    {
+                        piece.pieceFile = validFiles.get(i);
+                        piece.pieceRank = validRanks.get(i);
+                        if (!isKingInCheck(turn, kingFile, kingRank))
+                        {
+                            piece.pieceFile = ogFile;
+                            piece.pieceRank = ogRank;
+                            return false;
+                        }
+                    }
+                    piece.pieceFile = ogFile;
+                    piece.pieceRank = ogRank;
+                    for (int i = 0; i < validRanks.size(); i++) 
+                    {
+                        if (!isSquareEmpty(validFiles.get(i), validRanks.get(i)))
+                        {
+                            targetIndex = findPieceIndex(validFiles.get(i), validRanks.get(i));
+                            if (targetIndex != -1)
+                            {
+                                capturedPiece = pieces.remove(targetIndex);
+                                if (!isKingInCheck(turn, kingFile, kingRank))
+                                {
+                                    pieces.add(capturedPiece);
+                                    return false;
+                                }
+                                pieces.add(capturedPiece);
+                            }
+                        }
+                    }
+                    validFiles.clear();
+                    validRanks.clear();
+                }
+    
+    
+                if (piece.pieceType == PieceType.BN)
+                {
+                    System.out.println("im black n");
+                    Knight tempKnight = new Knight(piece.pieceType, piece.pieceFile, piece.pieceRank);
+                    for (pieceRank = 1; pieceRank <= 8; pieceRank++)
+                    {
+                        count = 1;
+                        while(count <= 8)
+                        {
+                            if(!((pieceFile == tempKnight.getPieceFile()) && (pieceRank == tempKnight.getPieceRank())) && tempKnight.canMove(tempKnight.getPieceFile(), tempKnight.getPieceRank(), pieceFile, pieceRank, turn))
+                            {
+                                validFiles.add(pieceFile);
+                                validRanks.add(pieceRank);
+                            }
+    
+    
+                            count++;
+                            pieceFile = Piece.next(pieceFile);
+                        }
+                    }
+    
+    
+                    //Using list of possible moves, go through them and for each one check if the move changes check status
+                    for (int i = 0; i < validRanks.size(); i++) 
+                    {
+                        piece.pieceFile = validFiles.get(i);
+                        piece.pieceRank = validRanks.get(i);
+                        if (!isKingInCheck(turn, kingFile, kingRank))
+                        {
+                            piece.pieceFile = ogFile;
+                            piece.pieceRank = ogRank;
+                            return false;
+                        }
+                    }
+                    piece.pieceFile = ogFile;
+                    piece.pieceRank = ogRank;
+                    for (int i = 0; i < validRanks.size(); i++) 
+                    {
+                        if (!isSquareEmpty(validFiles.get(i), validRanks.get(i)))
+                        {
+                            targetIndex = findPieceIndex(validFiles.get(i), validRanks.get(i));
+                            if (targetIndex != -1)
+                            {
+                                capturedPiece = pieces.remove(targetIndex);
+                                if (!isKingInCheck(turn, kingFile, kingRank))
+                                {
+                                    pieces.add(capturedPiece);
+                                    return false;
+                                }
+                                pieces.add(capturedPiece);
+                            }
+                        }
+                    }
+                    validFiles.clear();
+                    validRanks.clear();
+                }
+    
+    
+                if (piece.pieceType == PieceType.BR)
+                {
+                    System.out.println("im black r");
+                    Rook tempRook = new Rook(piece.pieceType, piece.pieceFile, piece.pieceRank);
+                    for (pieceRank = 1; pieceRank <= 8; pieceRank++)
+                    {
+                        count = 1;
+                        while(count <= 8)
+                        {
+                            if(!((pieceFile == tempRook.getPieceFile()) && (pieceRank == tempRook.getPieceRank())) && tempRook.canMove(tempRook.getPieceFile(), tempRook.getPieceRank(), pieceFile, pieceRank, turn))
+                            {
+                                validFiles.add(pieceFile);
+                                validRanks.add(pieceRank);
+                            }
+    
+    
+                            count++;
+                            pieceFile = Piece.next(pieceFile);
+                        }
+                    }
+    
+
+                    //Using list of possible moves, go through them and for each one check if the move changes check status
+                    for (int i = 0; i < validRanks.size(); i++) 
+                    {
+                        piece.pieceFile = validFiles.get(i);
+                        piece.pieceRank = validRanks.get(i);
+                        if (!isKingInCheck(turn, kingFile, kingRank))
+                        {
+                            piece.pieceFile = ogFile;
+                            piece.pieceRank = ogRank;
+                            return false;
+                        }
+                    }
+                    piece.pieceFile = ogFile;
+                    piece.pieceRank = ogRank;
+                    for (int i = 0; i < validRanks.size(); i++) 
+                    {
+                        if (!isSquareEmpty(validFiles.get(i), validRanks.get(i)))
+                        {
+                            targetIndex = findPieceIndex(validFiles.get(i), validRanks.get(i));
+                            if (targetIndex != -1)
+                            {
+                                capturedPiece = pieces.remove(targetIndex);
+                                if (!isKingInCheck(turn, kingFile, kingRank))
+                                {
+                                    pieces.add(capturedPiece);
+                                    return false;
+                                }
+                                pieces.add(capturedPiece);
+                            }
+                        }
+                    }
+                    validFiles.clear();
+                    validRanks.clear();
+                }
+    
+    
+                if (piece.pieceType == PieceType.BQ)
+                {
+                    System.out.println("im black q");
+                    Queen tempQueen = new Queen(piece.pieceType, piece.pieceFile, piece.pieceRank);
+                    for (pieceRank = 1; pieceRank <= 8; pieceRank++)
+                    {
+                        count = 1;
+                        while(count <= 8)
+                        {
+                            if(!((pieceFile == tempQueen.getPieceFile()) && (pieceRank == tempQueen.getPieceRank())) && tempQueen.canMove(tempQueen.getPieceFile(), tempQueen.getPieceRank(), pieceFile, pieceRank, turn))
+                            {
+                                validFiles.add(pieceFile);
+                                validRanks.add(pieceRank);
+                            }
+    
+    
+                            count++;
+                            pieceFile = Piece.next(pieceFile);
+                        }
+                    }
+    
+    
+                    //Using list of possible moves, go through them and for each one check if the move changes check status
+                    for (int i = 0; i < validRanks.size(); i++) 
+                    {
+                        piece.pieceFile = validFiles.get(i);
+                        piece.pieceRank = validRanks.get(i);
+                        if (!isKingInCheck(turn, kingFile, kingRank))
+                        {
+                            piece.pieceFile = ogFile;
+                            piece.pieceRank = ogRank;
+                            return false;
+                        }
+                    }
+                    piece.pieceFile = ogFile;
+                    piece.pieceRank = ogRank;
+                    for (int i = 0; i < validRanks.size(); i++) 
+                    {
+                        if (!isSquareEmpty(validFiles.get(i), validRanks.get(i)))
+                        {
+                            targetIndex = findPieceIndex(validFiles.get(i), validRanks.get(i));
+                            if (targetIndex != -1)
+                            {
+                                capturedPiece = pieces.remove(targetIndex);
+                                if (!isKingInCheck(turn, kingFile, kingRank))
+                                {
+                                    pieces.add(capturedPiece);
+                                    return false;
+                                }
+                                pieces.add(capturedPiece);
+                            }
+                        }
+                    }
+                    validFiles.clear();
+                    validRanks.clear();
+                }
+            }
+        }
 
         //You're cooked, gg's, good try though, lowkey you kinda suck though, you could've won like 3 moves ago but I guess you didn't see it, it is what is is
         return true;
