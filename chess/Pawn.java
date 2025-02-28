@@ -14,8 +14,6 @@ public class Pawn extends Piece {
         this.enPassant = false;
     }
 
-
-
     public boolean canMove(PieceFile currFile, int currRank, PieceFile nextFile, int nextRank, char turn)   //turn will either be 'b' or 'w'
     {
         if(isWithinBoard(nextFile, nextRank)){
@@ -48,12 +46,12 @@ public class Pawn extends Piece {
             }
 
             //Taking diagonally
-            if (!isSquareEmpty(nextFile, nextRank) && ((currFile.ordinal() + 1 == nextFile.ordinal()) || (currFile.ordinal() - 1 == nextFile.ordinal())) && (currRank + 1 == nextRank) && (turn == 'w')){
+            if (!isSquareEmpty(nextFile, nextRank) && getPieceColorAtPosition(nextFile, nextRank) == 'b' && ((currFile.ordinal() + 1 == nextFile.ordinal()) || (currFile.ordinal() - 1 == nextFile.ordinal())) && (currRank + 1 == nextRank) && (turn == 'w')){
                 this.hasMoved = true;
                 return true;
             }
 
-            if (!isSquareEmpty(nextFile, nextRank) && ((currFile.ordinal() + 1 == nextFile.ordinal()) || (currFile.ordinal() - 1 == nextFile.ordinal())) && (currRank - 1 == nextRank) && (turn == 'b')){
+            if (!isSquareEmpty(nextFile, nextRank) && getPieceColorAtPosition(nextFile, nextRank) == 'w' && ((currFile.ordinal() + 1 == nextFile.ordinal()) || (currFile.ordinal() - 1 == nextFile.ordinal())) && (currRank - 1 == nextRank) && (turn == 'b')){
                 this.hasMoved = true;
                 return true;
             }

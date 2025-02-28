@@ -104,6 +104,8 @@ public class Chess {
         ArrayList<PieceFile> validFiles = new ArrayList<>();
         int ogRank;
         PieceFile ogFile;
+        ReturnPiece capturedPiece = null;
+        int targetIndex = -1;
 
         for (ReturnPiece piece : pieces)
         {
@@ -140,11 +142,27 @@ public class Chess {
                         return false;
                     }
                 }
-
-                validFiles.clear();
-                validRanks.clear();
                 piece.pieceFile = ogFile;
                 piece.pieceRank = ogRank;
+                for (int i = 0; i < validRanks.size(); i++) 
+                {
+                    if (!isSquareEmpty(validFiles.get(i), validRanks.get(i)))
+                    {
+                        targetIndex = findPieceIndex(validFiles.get(i), validRanks.get(i));
+                        if (targetIndex != -1)
+                        {
+                            capturedPiece = pieces.remove(targetIndex);
+                            if (!isKingInCheck(turn, kingFile, kingRank))
+                            {
+                                pieces.add(capturedPiece);
+                                return false;
+                            }
+                            pieces.add(capturedPiece);
+                        }
+                    }
+                }
+                validFiles.clear();
+                validRanks.clear();
             }
 
             if (piece.pieceType == PieceType.WB)
@@ -178,11 +196,27 @@ public class Chess {
                         return false;
                     }
                 }
-
-                validFiles.clear();
-                validRanks.clear();
                 piece.pieceFile = ogFile;
                 piece.pieceRank = ogRank;
+                for (int i = 0; i < validRanks.size(); i++) 
+                {
+                    if (!isSquareEmpty(validFiles.get(i), validRanks.get(i)))
+                    {
+                        targetIndex = findPieceIndex(validFiles.get(i), validRanks.get(i));
+                        if (targetIndex != -1)
+                        {
+                            capturedPiece = pieces.remove(targetIndex);
+                            if (!isKingInCheck(turn, kingFile, kingRank))
+                            {
+                                pieces.add(capturedPiece);
+                                return false;
+                            }
+                            pieces.add(capturedPiece);
+                        }
+                    }
+                }
+                validFiles.clear();
+                validRanks.clear();
             }
 
             if (piece.pieceType == PieceType.WN)
@@ -216,11 +250,27 @@ public class Chess {
                         return false;
                     }
                 }
-
-                validFiles.clear();
-                validRanks.clear();
                 piece.pieceFile = ogFile;
                 piece.pieceRank = ogRank;
+                for (int i = 0; i < validRanks.size(); i++) 
+                {
+                    if (!isSquareEmpty(validFiles.get(i), validRanks.get(i)))
+                    {
+                        targetIndex = findPieceIndex(validFiles.get(i), validRanks.get(i));
+                        if (targetIndex != -1)
+                        {
+                            capturedPiece = pieces.remove(targetIndex);
+                            if (!isKingInCheck(turn, kingFile, kingRank))
+                            {
+                                pieces.add(capturedPiece);
+                                return false;
+                            }
+                            pieces.add(capturedPiece);
+                        }
+                    }
+                }
+                validFiles.clear();
+                validRanks.clear();
             }
 
             if (piece.pieceType == PieceType.WR)
@@ -247,11 +297,6 @@ public class Chess {
                 {
                     piece.pieceFile = validFiles.get(i);
                     piece.pieceRank = validRanks.get(i);
-                    System.out.println("Moves: " + validFiles.get(i).ordinal() + " " + validRanks.get(i));
-                    /*if (!isSquareEmpty(validFiles.get(i), validRanks.get(i)))
-                    {
-                        ReturnPiece tempPiece = new Piece(piece.pieceType, piece.pieceFile, piece.pieceRank);
-                    }*/
                     if (!isKingInCheck(turn, kingFile, kingRank))
                     {
                         piece.pieceFile = ogFile;
@@ -259,11 +304,27 @@ public class Chess {
                         return false;
                     }
                 }
-
-                validFiles.clear();
-                validRanks.clear();
                 piece.pieceFile = ogFile;
                 piece.pieceRank = ogRank;
+                for (int i = 0; i < validRanks.size(); i++) 
+                {
+                    if (!isSquareEmpty(validFiles.get(i), validRanks.get(i)))
+                    {
+                        targetIndex = findPieceIndex(validFiles.get(i), validRanks.get(i));
+                        if (targetIndex != -1)
+                        {
+                            capturedPiece = pieces.remove(targetIndex);
+                            if (!isKingInCheck(turn, kingFile, kingRank))
+                            {
+                                pieces.add(capturedPiece);
+                                return false;
+                            }
+                            pieces.add(capturedPiece);
+                        }
+                    }
+                }
+                validFiles.clear();
+                validRanks.clear();
             }
 
             if (piece.pieceType == PieceType.WQ)
@@ -297,11 +358,27 @@ public class Chess {
                         return false;
                     }
                 }
-
-                validFiles.clear();
-                validRanks.clear();
                 piece.pieceFile = ogFile;
                 piece.pieceRank = ogRank;
+                for (int i = 0; i < validRanks.size(); i++) 
+                {
+                    if (!isSquareEmpty(validFiles.get(i), validRanks.get(i)))
+                    {
+                        targetIndex = findPieceIndex(validFiles.get(i), validRanks.get(i));
+                        if (targetIndex != -1)
+                        {
+                            capturedPiece = pieces.remove(targetIndex);
+                            if (!isKingInCheck(turn, kingFile, kingRank))
+                            {
+                                pieces.add(capturedPiece);
+                                return false;
+                            }
+                            pieces.add(capturedPiece);
+                        }
+                    }
+                }
+                validFiles.clear();
+                validRanks.clear();
             }
         }
 
