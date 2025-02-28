@@ -421,6 +421,7 @@ public class Chess {
         return false;
     }
 
+
     public static ReturnPiece getKing(char turn) {
         // Iterate through all pieces to find the current player's king
         for (ReturnPiece piece : pieces) {
@@ -562,7 +563,7 @@ public class Chess {
                 return littleBoy;
             }
         }
-        
+
         // Check if the move leaves the king in check
         if (isKingInCheck(turn, kingFile, kingRank)) {
             // Undo the move
@@ -616,14 +617,16 @@ public class Chess {
         kingFile = king.pieceFile;
         kingRank = king.pieceRank;
         if (isKingInCheck(opponentTurn, kingFile, kingRank)) {
-            if ((turn == 'w') && isKingInCheckMate(opponentTurn, kingFile, kingRank))
-            {
-                littleBoy.message = ReturnPlay.Message.CHECKMATE_WHITE_WINS;
-            }
-            else if ((turn == 'b') && isKingInCheckMate(opponentTurn, kingFile, kingRank))
+            if (opponentTurn == 'w' && isKingInCheckMate(opponentTurn, kingFile, kingRank))
             {
                 littleBoy.message = ReturnPlay.Message.CHECKMATE_BLACK_WINS;
             }
+
+            else if (opponentTurn == 'b' && isKingInCheckMate(opponentTurn, kingFile, kingRank))
+            {
+                littleBoy.message = ReturnPlay.Message.CHECKMATE_WHITE_WINS;
+            }
+
             else
             {
                 littleBoy.message = ReturnPlay.Message.CHECK;
@@ -644,7 +647,7 @@ public class Chess {
         if (drawRequested) {
             littleBoy.message = ReturnPlay.Message.DRAW;
         }
-    
+
         return littleBoy;
     }
     
