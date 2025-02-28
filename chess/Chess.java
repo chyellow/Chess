@@ -15,6 +15,17 @@ public class Chess {
         return pieces;
     }
 
+    public static boolean isSquareEmpty(PieceFile pieceFile, int pieceRank)
+    {
+        for(int i = 0; i < pieces.size(); i++){
+			if(pieces.get(i).pieceFile == pieceFile && pieces.get(i).pieceRank == pieceRank){
+				return false;
+			}
+		}
+        
+        return true;
+    }
+
     public static int findPieceIndex(PieceFile file, int rank) {
         for (int i = 0; i < pieces.size(); i++) {
             if (pieces.get(i).pieceFile == file && pieces.get(i).pieceRank == rank) {
@@ -23,6 +34,77 @@ public class Chess {
         }
         return -1;
     }
+
+    public static boolean isKingInCheckMate(char turn, PieceFile kingFile, int kingRank)
+    {
+        //Turn is the color of the king in check(mate?)
+        //Check if the king can move out of it
+        if (Piece.isWithinBoardOrdinal((kingFile.ordinal() - 1), (kingRank + 1))) //Top left
+        {
+            if(isSquareEmpty(Piece.prev(kingFile), (kingRank + 1)) && !isKingInCheck(turn, Piece.prev(kingFile), (kingRank + 1)))
+            {
+                return false;
+            }
+        }
+        if (Piece.isWithinBoardOrdinal(kingFile.ordinal(), (kingRank + 1))) //Top mid
+        {
+            if(isSquareEmpty(kingFile, (kingRank + 1)) && !isKingInCheck(turn, kingFile, (kingRank + 1)))
+            {
+                return false;
+            }
+        }
+        if (Piece.isWithinBoardOrdinal((kingFile.ordinal() + 1), (kingRank + 1))) //Top right
+        {
+            if(isSquareEmpty(Piece.next(kingFile), (kingRank + 1)) && !isKingInCheck(turn, Piece.next(kingFile), (kingRank + 1)))
+            {
+                return false;
+            }
+        }
+        if (Piece.isWithinBoardOrdinal((kingFile.ordinal() - 1), kingRank)) //Mid left
+        {
+            if(isSquareEmpty(Piece.prev(kingFile), kingRank) && !isKingInCheck(turn, Piece.prev(kingFile), kingRank))
+            {
+                return false;
+            }
+        }
+        if (Piece.isWithinBoardOrdinal((kingFile.ordinal() + 1), kingRank)) //Mid right
+        {
+            if(isSquareEmpty(Piece.next(kingFile), kingRank) && !isKingInCheck(turn, Piece.next(kingFile), kingRank))
+            {
+                return false;
+            }
+        }
+        if (Piece.isWithinBoardOrdinal((kingFile.ordinal() - 1), (kingRank - 1))) //Bottom left
+        {
+            if(isSquareEmpty(Piece.prev(kingFile), (kingRank - 1)) && !isKingInCheck(turn, Piece.prev(kingFile), (kingRank - 1)))
+            {
+                return false;
+            }
+        }
+        if (Piece.isWithinBoardOrdinal(kingFile.ordinal(), (kingRank - 1))) //Bottom mid
+        {
+            if(isSquareEmpty(kingFile, (kingRank - 1)) && !isKingInCheck(turn, kingFile, (kingRank - 1)))
+            {
+                return false;
+            }
+        }
+        if (Piece.isWithinBoardOrdinal((kingFile.ordinal() + 1), (kingRank - 1))) //Bottom right
+        {
+            if(isSquareEmpty(Piece.next(kingFile), (kingRank - 1)) && !isKingInCheck(turn, Piece.next(kingFile), (kingRank - 1)))
+            {
+                return false;
+            }
+        }
+
+        //Check if another piece can move into it
+        
+
+
+
+        //You're cooked, gg's, good try though, lowkey you kinda suck though, you could've won like 3 moves ago but I guess you didn't see it, it is what is is
+        return true;
+    }
+
     public static boolean isKingInCheck(char turn, PieceFile kingFile, int kingRank) {
         char oppositeTurn = (turn == 'w') ? 'b' : 'w';
 
@@ -72,7 +154,7 @@ public class Chess {
         littleBoy.message = null;
         littleBoy.piecesOnBoard = pieces;
     
-        move = move.trim();
+        move = move.trim(); 
     
         if (move.equalsIgnoreCase("resign")) {
             littleBoy.message = currentPlayer == Player.white ? ReturnPlay.Message.RESIGN_BLACK_WINS : ReturnPlay.Message.RESIGN_WHITE_WINS;
@@ -252,7 +334,18 @@ public class Chess {
         kingFile = king.pieceFile;
         kingRank = king.pieceRank;
         if (isKingInCheck(opponentTurn, kingFile, kingRank)) {
-            littleBoy.message = ReturnPlay.Message.CHECK;
+            if ((turn == 'w') && isKingInCheckMate(opponentTurn, kingFile, kingRank))
+            {
+                littleBoy.message = ReturnPlay.Message.CHECKMATE_WHITE_WINS;
+            }
+            else if ((turn == 'b') && isKingInCheckMate(opponentTurn, kingFile, kingRank))
+            {
+                littleBoy.message = ReturnPlay.Message.CHECKMATE_BLACK_WINS;
+            }
+            else
+            {
+                littleBoy.message = ReturnPlay.Message.CHECK;
+            }
         }
     
         // Change turn only after a successful move
@@ -324,3 +417,4 @@ public class Chess {
         pieces.add (new King(PieceType.BK, PieceFile.e, 8));
     }
 }
+
