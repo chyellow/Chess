@@ -1,30 +1,36 @@
 package chess;
 
+
 import chess.ReturnPiece.PieceFile;
 import chess.ReturnPiece.PieceType;
 import java.util.ArrayList;
 
+
 public class Chess {
 
+
     enum Player { white, black }
-    
+   
     static Player currentPlayer = Player.white;
     static ArrayList<ReturnPiece> pieces = new ArrayList<ReturnPiece>();
+
 
     public static ArrayList<ReturnPiece> getPieces() {
         return pieces;
     }
 
+
     public static boolean isSquareEmpty(PieceFile pieceFile, int pieceRank)
     {
         for(int i = 0; i < pieces.size(); i++){
-			if(pieces.get(i).pieceFile == pieceFile && pieces.get(i).pieceRank == pieceRank){
-				return false;
-			}
-		}
-        
+            if(pieces.get(i).pieceFile == pieceFile && pieces.get(i).pieceRank == pieceRank){
+                return false;
+            }
+        }
+       
         return true;
     }
+
 
     public static int findPieceIndex(PieceFile file, int rank) {
         for (int i = 0; i < pieces.size(); i++) {
@@ -34,6 +40,7 @@ public class Chess {
         }
         return -1;
     }
+
 
     public static boolean isKingInCheckMate(char turn, PieceFile kingFile, int kingRank)
     {
@@ -96,6 +103,7 @@ public class Chess {
             }
         }
 
+
         //Check if another piece can move into it
         PieceFile pieceFile = PieceFile.a;
         int count = 1;
@@ -104,6 +112,7 @@ public class Chess {
         ArrayList<PieceFile> validFiles = new ArrayList<>();
         int ogRank;
         PieceFile ogFile;
+
 
         for (ReturnPiece piece : pieces)
         {
@@ -123,13 +132,15 @@ public class Chess {
                             validRanks.add(pieceRank);
                         }
 
+
                         count++;
                         pieceFile = Piece.next(pieceFile);
                     }
                 }
 
+
                 //Using list of possible moves, go through them and for each one check if the move changes check status
-                for (int i = 0; i < validRanks.size(); i++) 
+                for (int i = 0; i < validRanks.size(); i++)
                 {
                     piece.pieceFile = validFiles.get(i);
                     piece.pieceRank = validRanks.get(i);
@@ -141,11 +152,13 @@ public class Chess {
                     }
                 }
 
+
                 validFiles.clear();
                 validRanks.clear();
                 piece.pieceFile = ogFile;
                 piece.pieceRank = ogRank;
             }
+
 
             if (piece.pieceType == PieceType.WB)
             {
@@ -161,13 +174,15 @@ public class Chess {
                             validRanks.add(pieceRank);
                         }
 
+
                         count++;
                         pieceFile = Piece.next(pieceFile);
                     }
                 }
 
+
                 //Using list of possible moves, go through them and for each one check if the move changes check status
-                for (int i = 0; i < validRanks.size(); i++) 
+                for (int i = 0; i < validRanks.size(); i++)
                 {
                     piece.pieceFile = validFiles.get(i);
                     piece.pieceRank = validRanks.get(i);
@@ -179,11 +194,13 @@ public class Chess {
                     }
                 }
 
+
                 validFiles.clear();
                 validRanks.clear();
                 piece.pieceFile = ogFile;
                 piece.pieceRank = ogRank;
             }
+
 
             if (piece.pieceType == PieceType.WN)
             {
@@ -199,13 +216,15 @@ public class Chess {
                             validRanks.add(pieceRank);
                         }
 
+
                         count++;
                         pieceFile = Piece.next(pieceFile);
                     }
                 }
 
+
                 //Using list of possible moves, go through them and for each one check if the move changes check status
-                for (int i = 0; i < validRanks.size(); i++) 
+                for (int i = 0; i < validRanks.size(); i++)
                 {
                     piece.pieceFile = validFiles.get(i);
                     piece.pieceRank = validRanks.get(i);
@@ -217,11 +236,13 @@ public class Chess {
                     }
                 }
 
+
                 validFiles.clear();
                 validRanks.clear();
                 piece.pieceFile = ogFile;
                 piece.pieceRank = ogRank;
             }
+
 
             if (piece.pieceType == PieceType.WR)
             {
@@ -237,13 +258,15 @@ public class Chess {
                             validRanks.add(pieceRank);
                         }
 
+
                         count++;
                         pieceFile = Piece.next(pieceFile);
                     }
                 }
 
+
                 //Using list of possible moves, go through them and for each one check if the move changes check status
-                for (int i = 0; i < validRanks.size(); i++) 
+                for (int i = 0; i < validRanks.size(); i++)
                 {
                     piece.pieceFile = validFiles.get(i);
                     piece.pieceRank = validRanks.get(i);
@@ -260,11 +283,13 @@ public class Chess {
                     }
                 }
 
+
                 validFiles.clear();
                 validRanks.clear();
                 piece.pieceFile = ogFile;
                 piece.pieceRank = ogRank;
             }
+
 
             if (piece.pieceType == PieceType.WQ)
             {
@@ -280,13 +305,15 @@ public class Chess {
                             validRanks.add(pieceRank);
                         }
 
+
                         count++;
                         pieceFile = Piece.next(pieceFile);
                     }
                 }
 
+
                 //Using list of possible moves, go through them and for each one check if the move changes check status
-                for (int i = 0; i < validRanks.size(); i++) 
+                for (int i = 0; i < validRanks.size(); i++)
                 {
                     piece.pieceFile = validFiles.get(i);
                     piece.pieceRank = validRanks.get(i);
@@ -298,6 +325,7 @@ public class Chess {
                     }
                 }
 
+
                 validFiles.clear();
                 validRanks.clear();
                 piece.pieceFile = ogFile;
@@ -305,12 +333,15 @@ public class Chess {
             }
         }
 
+
         //You're cooked, gg's, good try though, lowkey you kinda suck though, you could've won like 3 moves ago but I guess you didn't see it, it is what is is
         return true;
     }
 
+
     public static boolean isKingInCheck(char turn, PieceFile kingFile, int kingRank) {
         char oppositeTurn = (turn == 'w') ? 'b' : 'w';
+
 
         // Iterate through all pieces to see if any can attack the king
         for (ReturnPiece piece : pieces) {
@@ -344,6 +375,8 @@ public class Chess {
     }
 
 
+
+
     public static ReturnPiece getKing(char turn) {
         // Iterate through all pieces to find the current player's king
         for (ReturnPiece piece : pieces) {
@@ -354,42 +387,42 @@ public class Chess {
         }
         return null; // No king found (should not happen in a valid game)
     }
-    public static ReturnPlay play(String move) { 
+    public static ReturnPlay play(String move) {
         ReturnPlay littleBoy = new ReturnPlay();
         littleBoy.message = null;
         littleBoy.piecesOnBoard = pieces;
-    
-        move = move.trim(); 
-    
+   
+        move = move.trim();
+   
         if (move.equalsIgnoreCase("resign")) {
             littleBoy.message = currentPlayer == Player.white ? ReturnPlay.Message.RESIGN_BLACK_WINS : ReturnPlay.Message.RESIGN_WHITE_WINS;
             return littleBoy;
         }
-    
+   
         boolean drawRequested = move.endsWith("draw?");
         if (drawRequested) {
             move = move.substring(0, move.length() - 5).trim();
         }
-    
+   
         String[] parts = move.split(" ");
         if (parts.length < 2) {
             littleBoy.message = ReturnPlay.Message.ILLEGAL_MOVE;
             return littleBoy;
         }
-    
+   
         char initFileChar = parts[0].charAt(0);
         int initRank = Character.getNumericValue(parts[0].charAt(1));
         char nextFileChar = parts[1].charAt(0);
         int nextRank = Character.getNumericValue(parts[1].charAt(1));
-    
+   
         PieceFile initFile = PieceFile.valueOf(String.valueOf(initFileChar));
         PieceFile nextFile = PieceFile.valueOf(String.valueOf(nextFileChar));
-    
+   
         if ((initFile == nextFile) && (initRank == nextRank)) {
             littleBoy.message = ReturnPlay.Message.ILLEGAL_MOVE;
             return littleBoy;
         }
-        
+       
         // Handle pawn promotion
         PieceType promotionType = currentPlayer == Player.white ? PieceType.WQ : PieceType.BQ; // Default to queen
         if (parts.length == 3) {
@@ -409,24 +442,25 @@ public class Chess {
             }
         }
 
+
         int index = findPieceIndex(initFile, initRank);
         if (index == -1) {
             littleBoy.message = ReturnPlay.Message.ILLEGAL_MOVE;
             return littleBoy;
         }
-    
+   
         char turn = (currentPlayer == Player.white) ? 'w' : 'b';
-    
+   
         // Ensure the piece belongs to the current player
         PieceType pieceType = pieces.get(index).pieceType;
-        if ((turn == 'w' && pieceType.toString().startsWith("B")) || 
+        if ((turn == 'w' && pieceType.toString().startsWith("B")) ||
             (turn == 'b' && pieceType.toString().startsWith("W"))) {
             littleBoy.message = ReturnPlay.Message.ILLEGAL_MOVE;
             return littleBoy;
         }
-    
+   
         boolean check = false;
-        
+       
         if (pieceType == PieceType.WP || pieceType == PieceType.BP) {
             Pawn tempPawn = new Pawn(pieceType, initFile, initRank);
             check = tempPawn.canMove(initFile, initRank, nextFile, nextRank, turn);
@@ -446,22 +480,22 @@ public class Chess {
             Queen tempQueen = new Queen(pieceType, initFile, initRank);
             check = tempQueen.canMove(initFile, initRank, nextFile, nextRank, turn);
         }
-    
+   
         if (!check) {
             littleBoy.message = ReturnPlay.Message.ILLEGAL_MOVE;
             return littleBoy;
         }
-    
+   
         int targetIndex = findPieceIndex(nextFile, nextRank);
-    
+   
         // Store original position in case move is reverted
         PieceFile originalFile = pieces.get(index).pieceFile;
         int originalRank = pieces.get(index).pieceRank;
-    
+   
         // Move piece
         pieces.get(index).pieceFile = nextFile;
         pieces.get(index).pieceRank = nextRank;
-    
+   
         // Ensure the move doesn't leave the player's own king in check
         ReturnPiece king = getKing(turn);
         // Get the current player's king
@@ -471,13 +505,14 @@ public class Chess {
         PieceFile kingFile = king.pieceFile;
         int kingRank = king.pieceRank;
 
-    
+
+   
         ReturnPiece capturedPiece = null;
         if (targetIndex != -1) {
             ReturnPiece targetPiece = pieces.get(targetIndex);
             if ((currentPlayer == Player.white && targetPiece.pieceType.toString().startsWith("B")) ||
                 (currentPlayer == Player.black && targetPiece.pieceType.toString().startsWith("W"))) {
-                
+               
                 // Temporarily store the captured piece in case we need to revert the move
                 capturedPiece = pieces.remove(targetIndex);
             } else {
@@ -486,20 +521,22 @@ public class Chess {
             }
         }
 
+
         // Check if the move leaves the king in check
         if (isKingInCheck(turn, kingFile, kingRank)) {
             // Undo the move
             pieces.get(index).pieceFile = originalFile;
             pieces.get(index).pieceRank = originalRank;
-        
+       
             // Restore the captured piece if there was one
             if (capturedPiece != null) {
                 pieces.add(targetIndex, capturedPiece); // Reinsert the captured piece back to its original position
             }
-        
+       
             littleBoy.message = ReturnPlay.Message.ILLEGAL_MOVE;
             return littleBoy;
         }
+
 
         // Handle en passant capture
         if (pieceType == PieceType.WP || pieceType == PieceType.BP) {
@@ -512,6 +549,7 @@ public class Chess {
                 }
             }
         }
+
 
         // Handle pawn promotion
         if ((pieceType == PieceType.WP && nextRank == 8) || (pieceType == PieceType.BP && nextRank == 1)) {
@@ -526,9 +564,9 @@ public class Chess {
                 pieces.add(new Queen(promotionType, nextFile, nextRank));
             }
         }
-        
+       
         littleBoy.piecesOnBoard = pieces;
-        
+       
         // Check if opponent's king is now in check
         char opponentTurn = (currentPlayer == Player.white) ? 'b' : 'w';
         king = getKing(opponentTurn);
@@ -544,20 +582,22 @@ public class Chess {
                 littleBoy.message = ReturnPlay.Message.CHECKMATE_BLACK_WINS;
             }
 
+
             else if (opponentTurn == 'b' && isKingInCheckMate(opponentTurn, kingFile, kingRank))
             {
                 littleBoy.message = ReturnPlay.Message.CHECKMATE_WHITE_WINS;
             }
+
 
             else
             {
                 littleBoy.message = ReturnPlay.Message.CHECK;
             }
         }
-    
+   
         // Change turn only after a successful move
         currentPlayer = (currentPlayer == Player.white) ? Player.black : Player.white;
-    
+   
         // Reset movedTwo flag for all pawns
         for (ReturnPiece piece : pieces) {
             if (piece.pieceType == PieceType.WP || piece.pieceType == PieceType.BP) {
@@ -566,13 +606,16 @@ public class Chess {
             }
         }
 
+
         if (drawRequested) {
             littleBoy.message = ReturnPlay.Message.DRAW;
         }
 
+
         return littleBoy;
     }
-    
+   
+
 
     public static void start() {
         pieces.clear();
@@ -624,4 +667,3 @@ public class Chess {
         pieces.add (new King(PieceType.BK, PieceFile.e, 8));
     }
 }
-
