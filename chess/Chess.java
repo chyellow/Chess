@@ -23,6 +23,69 @@ public class Chess {
         }
         return -1;
     }
+
+    
+    public static boolean isKingInCheckMate(char turn) {
+        if (canKingEscape(turn)) {
+            return false; // The king can escape, so it's not checkmate.
+        }
+    
+    
+        return true; // No legal moves can stop the check, so it's checkmate
+    }
+
+    public static boolean canKingEscape(char turn) {
+        ReturnPiece originalKing = getKing(turn);
+        if (originalKing == null) {
+            return false; // No king found (should not happen in a valid game)
+        }
+    
+        // Create a new King object to avoid modifying the actual piece
+        King tempKing = new King(originalKing.pieceType, originalKing.pieceFile, originalKing.pieceRank);
+        PieceFile kingFile = tempKing.pieceFile;
+        int kingRank = tempKing.pieceRank;
+    
+        // Possible directions the king can move (up, down, left, right, diagonals)
+        int[] rankOffsets = {-1, -1, -1, 0, 0, 1, 1, 1};
+        int[] fileOffsets = {-1, 0, 1, -1, 1, -1, 0, 1};
+    
+        for (int i = 0; i < 8; i++) {
+            int newFileOrdinal = kingFile.ordinal() + fileOffsets[i];
+            int newRank = kingRank + rankOffsets[i];
+    
+            if (newRank < 1 || newRank > 8 || newFileOrdinal < 0 || newFileOrdinal >= PieceFile.values().length) {
+                continue; // Skip out-of-bounds moves
+            }
+    
+            PieceFile newFile = PieceFile.values()[newFileOrdinal];
+    
+            int targetIndex = findPieceIndex(newFile, newRank);
+            if (targetIndex != -1) {
+                ReturnPiece targetPiece = pieces.get(targetIndex);
+                if ((turn == 'w' && targetPiece.pieceType.toString().startsWith("W")) ||
+                    (turn == 'b' && targetPiece.pieceType.toString().startsWith("B"))) {
+                    continue; // Skip moves blocked by own pieces
+                }
+            }
+    
+            // Temporarily move the king and check if it's still in check
+            tempKing.pieceFile = newFile;
+            tempKing.pieceRank = newRank;
+    
+            boolean inCheck = isKingInCheck(turn, newFile, newRank);
+    
+            // Undo move
+            tempKing.pieceFile = kingFile;
+            tempKing.pieceRank = kingRank;
+    
+            if (!inCheck) {
+                return true; // The king has at least one escape square
+            }
+        }
+    
+        return false; // No legal moves for the king
+    }
+
     public static boolean isKingInCheck(char turn, PieceFile kingFile, int kingRank) {
         char oppositeTurn = (turn == 'w') ? 'b' : 'w';
 
@@ -55,6 +118,17 @@ public class Chess {
             }
         }
         return false;
+    }
+
+    public static boolean isKingInCheckMate(char turn, PieceFile kingFile, int kingRank)
+    {
+        if (canKingEscape(turn))
+        {
+            return false;
+        }
+
+
+        return true;
     }
 
     public static ReturnPiece getKing(char turn) {
@@ -198,7 +272,7 @@ public class Chess {
                 return littleBoy;
             }
         }
-        
+
         // Check if the move leaves the king in check
         if (isKingInCheck(turn, kingFile, kingRank)) {
             // Undo the move
@@ -252,7 +326,20 @@ public class Chess {
         kingFile = king.pieceFile;
         kingRank = king.pieceRank;
         if (isKingInCheck(opponentTurn, kingFile, kingRank)) {
-            littleBoy.message = ReturnPlay.Message.CHECK;
+            if (opponentTurn == 'w' && isKingInCheckMate(opponentTurn, kingFile, kingRank))
+            {
+                littleBoy.message = ReturnPlay.Message.CHECKMATE_BLACK_WINS;
+            }
+
+            else if (opponentTurn == 'b' && isKingInCheckMate(opponentTurn, kingFile, kingRank))
+            {
+                littleBoy.message = ReturnPlay.Message.CHECKMATE_WHITE_WINS;
+            }
+
+            else
+            {
+                littleBoy.message = ReturnPlay.Message.CHECK;
+            }
         }
     
         // Change turn only after a successful move
@@ -269,7 +356,7 @@ public class Chess {
         if (drawRequested) {
             littleBoy.message = ReturnPlay.Message.DRAW;
         }
-    
+
         return littleBoy;
     }
     
