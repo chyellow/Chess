@@ -32,6 +32,11 @@ public class Piece extends ReturnPiece {
         return pieceFile.ordinal() >= 0 && pieceFile.ordinal() < 8 && pieceRank >= 1 && pieceRank <= 8;
     }
 
+    public static boolean isWithinBoardOrdinal(int pieceFile, int pieceRank)
+    {
+        return pieceFile >= 0 && pieceFile < 8 && pieceRank >= 1 && pieceRank <= 8;
+    }
+
 
     public boolean canMove (PieceFile currFile, int currRank, PieceFile nextFile, int nextRank, char turn)
     {
